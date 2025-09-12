@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,8 +24,8 @@ class User extends Authenticatable
         'motto',
         'email',
         'password',
-        'status',
-        'image_folder'
+        'image_folder',
+        'status'
     ];
 
     /**
@@ -50,8 +51,34 @@ class User extends Authenticatable
         ];
     }
 
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'user_id');
+    }
+
+    public function blockedUsers(): BelongsToMany
+    {
+        // this user (by nickname) -> blocks rows where blocks.user_nickname = users.nickname
+        // returns User models of those blocked (joined via blocks.blockingUser -> users.nickname)
+        return $this->belongsToMany(
+            User::class,     // related model
+            'blocks',        // pivot table
+            'user_nickname', // pivot column pointing to this user's nickname
+            'blockingUser',  // pivot column pointing to the other user's nickname
+            'nickname',      // local key on this model
+            'nickname'  // related key on related model
+        );
+    }
+
+    public function blockedBy()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'blocks',
+            'blockingUser',  // pivot column that points to the "blocker"
+            'user_nickname', // pivot column that points to the "blocked"
+            'nickname',
+            'nickname'
+        );
     }
 }

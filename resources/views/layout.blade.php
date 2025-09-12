@@ -37,7 +37,7 @@
         || request()->is('/search') || request()->is('/search_user'))
         <x-search-bar/>
     @endif
-    <main class="container">
+    <main>
         {{-- Display alert messages --}}
         @if(session('success'))
             <x-alert type="success" message="{{session('success')}}" />

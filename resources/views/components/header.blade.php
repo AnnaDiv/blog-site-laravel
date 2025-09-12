@@ -12,20 +12,20 @@
                 <a href="">Logout</a>
             @endauth
             @guest
-                <a href="">Login</a>
+                <a href="{{route('login')}}">Login</a>
             @endguest
         </div>
         <div class="profile-pic">
             @auth
-                <img id="profile-toggle" src="<?php echo $_SESSION['profile_pic']; ?>" alt="Profile Picture">
+                <img id="profile-toggle" src="" alt="Profile Picture">
                 <nav id="side-nav-profile">
-                    <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'create']); ?>">Create Post</a>
-                    <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'profile', 'nickname' => $_SESSION['nickname'], 'page' => 1]); ?>">My profile</a>
-                    <a href="index.php?<?php echo http_build_query(['route' => 'admin', 'pages' => 'logout']); ?>">Logout</a>
+                    <a href="#create_post">Create Post</a>
+                    <a href="#link_to_profile">My profile</a>
+                    <a href="#logout">Logout</a>
                 </nav>
             @endauth
             @guest
-                <a id="side-nav-profile2" href="index.php?<?php echo http_build_query(['route' => 'admin', 'pages' => 'create/login']); ?>">Register</a>
+                <a id="side-nav-profile2" href="{{route('register')}}">Register</a>
             @endguest
         </div>
     </div>

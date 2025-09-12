@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use Illuminate\Http\Request;
-use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use App\Models\Post;
+use App\Models\Blocks;
+use App\Models\User;
 
 class EntriesRepository
 {
@@ -33,37 +35,26 @@ class EntriesRepository
         }
 
         $posts = $query->paginate($perPage);
-        //dd($posts);
         return $posts;
     }
 
     public function excludedUsers(string|bool $nickname)
     {
-        if ($nickname === false) {
+        $user = User::where('nickname', $nickname)->first();
+
+        if (!$user) {
             return [];
         }
-        $query = Post::query()
-            ->select([
-                'blocks.user_nickname',
-                'blocks.blockingUser'
-            ])
-            ->where('user_nickname', $nickname)
-            ->where('blockingUser', $nickname)
-            ->where('status', 1);
 
-        $names = $query->get();
+        $blockedUsers = $user->blockedUsers()
+            ->wherePivot('status', 1)
+            ->pluck('nickname')
+            ->all();
+        $blockedByUsers = $user->blockedBy()
+            ->wherePivot('status', 1)
+            ->pluck('nickname')
+            ->all();
 
-        $excludedUsers = [];
-
-        if (!empty($names)) {
-            foreach ($names as $name) {
-                if ($name['user_nickname'] === $nickname) {
-                    $excludedUsers[] = $name['blockingUser'];
-                } elseif ($name['blockingUser'] === $nickname) {
-                    $excludedUsers[] = $name['user_nickname'];
-                }
-            }
-        }
-        return $excludedUsers;
+        return array_values(array_unique(array_merge($blockedUsers, $blockedByUsers)));
     }
 }

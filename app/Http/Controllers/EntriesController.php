@@ -15,8 +15,7 @@ class EntriesController extends Controller
         $perPage = 15;
         if ($request->user()) {
             $user = $request->user();
-            $nickname = $user->nickname;
-            $excludedUsers = $this->entriesRepository->excludedUsers($nickname);
+            $excludedUsers = $this->entriesRepository->excludedUsers($user->nickname);
         } else {
             $excludedUsers = [];
         }
