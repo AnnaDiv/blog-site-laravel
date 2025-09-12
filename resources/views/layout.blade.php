@@ -24,20 +24,20 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @vite('resources/css/app.css')
-    
+
     <script src="//unpkg.com/alpinejs" defer></script>
 
     <title>{{$title ?? 'Love it OR throw it'}}</title>
 </head>
 
-<body class="bg-gray-100">
+<body>
     <x-header />
 
     @if(request()->is('/') || request()->is('/main') || request()->is('/browse') 
         || request()->is('/search') || request()->is('/search_user'))
         <x-search-bar/>
     @endif
-    <main class="container mx-auto p-4 mt-4">
+    <main class="container">
         {{-- Display alert messages --}}
         @if(session('success'))
             <x-alert type="success" message="{{session('success')}}" />
