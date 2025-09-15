@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('searchForm');
+    const input = document.getElementById('search_q');
 
     let clickedButtonTarget = null;
 
@@ -21,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let targetURL = '';
 
         if (clickedButtonTarget === 'posts') {
-            targetURL = `index.php?route=client&pages=search&search_q=${query}&page=1`;
+            targetURL = `${window.searchRoutes.posts}?search_q=${query}`;
         } else if (clickedButtonTarget === 'users') {
-            targetURL = `index.php?route=client&pages=search_user&search_q=${query}&page=1`;
+            targetURL = `${window.searchRoutes.users}?search_q=${query}`;
         }
 
         window.location.href = targetURL;

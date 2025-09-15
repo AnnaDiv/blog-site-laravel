@@ -4,7 +4,7 @@
     <div x-data="{ show: true }" 
         x-init="setTimeout(() => show = false, {{$timeout}})" 
         x-show="show"
-        class="p-4 mb-4 text-sm text-white rounded {{$type == 'success' ? 'bg-green-500' : 'bg-red-500'}}">
+        class="p-2 mb-4 text-sm text-black text-center fony-bold rounded {{$type == 'success' ? 'bg-green-300' : 'bg-red-300'}}">
         {{$message}}
     </div>
 @endif

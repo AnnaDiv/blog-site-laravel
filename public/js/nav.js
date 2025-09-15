@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', function () {
+/*document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.getElementById('menu-toggle');
     const nav = document.getElementById('side-nav');
 
     menuToggle.addEventListener('click', function () {
         nav.classList.toggle('open');
     });
-});
+}); */
 
 document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.getElementById('profile-toggle');
@@ -15,4 +15,3 @@ document.addEventListener('DOMContentLoaded', function () {
         nav.classList.toggle('open');
     });
 });
-

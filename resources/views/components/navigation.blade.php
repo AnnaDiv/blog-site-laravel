@@ -1,15 +1,15 @@
-<nav>
+<nav space-y-2>
     <a href="{{route('home')}}"> Browse</a>
     @auth
         <a href="">My Homepage</a>
     @endauth
     <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'myart', 'page' => 1]); ?>">My art</a>
-    <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'categories', 'page' => 1 ]); ?>">Categories</a>
+    <a href="{{route('categories')}}">Categories</a>
     <a href="{{route('contact_us')}}">Contact us</a>
     @if(Auth::id()=='1')
         <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'control']); ?>">Control Panel</a>
     @endif
-        <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'create']); ?>">Create Post</a>
+        <a href="{{route('post.create')}}">Create Post</a>
     @auth
         <a href="#link_to_profile">My profile</a>
         <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'liked_posts', 'page' => 1]); ?>">My likes</a>

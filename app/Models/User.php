@@ -81,4 +81,20 @@ class User extends Authenticatable
             'nickname'
         );
     }
+
+    public function hasBlocked(User $otherUser): bool
+    {
+        return $this->blockedUsers()
+            ->wherePivot('status', 1)
+            ->where('nickname', $otherUser->nickname)
+            ->exists();
+    }
+
+    public function isBlockedBy(User $otherUser): bool
+    {
+        return $this->blockedBy()
+            ->wherePivot('status', 1)
+            ->where('blockingUser', $otherUser->nickname)
+            ->exists();
+    }
 }

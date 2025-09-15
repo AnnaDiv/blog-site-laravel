@@ -28,22 +28,22 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 
     <title>{{$title ?? 'Love it OR throw it'}}</title>
+    
 </head>
 
 <body>
     <x-header />
-
-    @if(request()->is('/') || request()->is('/main') || request()->is('/browse') 
-        || request()->is('/search') || request()->is('/search_user'))
+    @if(request()->is('/') || request()->is('search/posts') || 
+        request()->is('search/users'))
         <x-search-bar/>
     @endif
     <main>
         {{-- Display alert messages --}}
         @if(session('success'))
-            <x-alert type="success" message="{{session('success')}}" />
+            <div class="alert"><x-alert type="success" message="{{session('success')}}" /></div>
         @endif
         @if(session('error'))
-            <x-alert type="error" message="{{session('error')}}" />
+            <div class="alert"><x-alert type="error" message="{{session('error')}}" /></div>
         @endif
         {{ $slot }}
     </main>
