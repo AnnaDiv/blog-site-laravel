@@ -9,11 +9,13 @@ class PerCategory extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'percategory';
 
     protected $fillable = [
         'post_id',
-        'category_title'
+        'category_id'
     ];
 
     public function post()

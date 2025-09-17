@@ -9,7 +9,7 @@
     @if(Auth::id()=='1')
         <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'control']); ?>">Control Panel</a>
     @endif
-        <a href="{{route('post.create')}}">Create Post</a>
+        <a href="{{route('post.createView')}}">Create Post</a>
     @auth
         <a href="#link_to_profile">My profile</a>
         <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'liked_posts', 'page' => 1]); ?>">My likes</a>

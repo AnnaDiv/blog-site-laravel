@@ -9,6 +9,8 @@ use App\Models\Post;
 class Category extends Model
 {
     use HasFactory;
+    
+    public $timestamps = false;
 
     protected $table = 'categories';
 

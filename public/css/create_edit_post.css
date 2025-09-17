@@ -1,3 +1,7 @@
+body {
+  box-sizing: unset !important; /* or initial */
+}
+
 #edit-post-title{
   font-size: 2rem;
   color: #0d47a1;
@@ -9,17 +13,28 @@
 
 .post-container-create {
   max-width: 1200px;
+  width: 95%;
   margin: 2rem auto;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   padding: 1rem;
+  overflow-x: hidden;
 }
-
+.post-container-create, 
+.post-container-create *, 
+.post-container-create *::before, 
+.post-container-create *::after {
+  box-sizing: content-box; /* or initial */
+}
 .post-layout-flex-create {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+}
+
+.post-layout-flex-create > * {
+  min-width: 0; /* 👈 THIS is crucial to prevent overflow */
+  flex-shrink: 1;
 }
 
 .post-image-create {

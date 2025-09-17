@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ImageController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -29,6 +30,8 @@ Route::middleware('guest')->group(function () { // only someone who isnt logged 
 });
 
 Route::middleware('auth')->group(function () { // only someone who is logged in can visit this
-    Route::get('/post/create', [EntriesController::class, 'create'])->name('post.create');
+    Route::get('/post/create', [EntriesController::class, 'createPostView'])->name('post.createView');
+    Route::post('/post/create', [EntriesController::class, 'create'])->name('post.create');
+    Route::post('/image/preview', [ImageController::class, 'preview'])->name('image.preview');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

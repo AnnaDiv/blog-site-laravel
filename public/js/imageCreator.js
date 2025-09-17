@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     if (!imageInput || !userID) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     imageInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         spinner.style.display = 'flex';
         progressBarWrapper.style.display = 'block';
 
+        // Track upload progress
         xhr.upload.addEventListener('progress', function (e) {
             if (e.lengthComputable) {
                 const percent = (e.loaded / e.total) * 100;
@@ -23,35 +25,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Handle response
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 spinner.style.display = 'none';
                 progressBarWrapper.style.display = 'none';
                 progressBar.style.width = '0%';
 
-                if (xhr.status === 200) {
-                    let data;
-                    try {
-                        data = JSON.parse(xhr.responseText);
-                    } catch {
-                        alert('Invalid server response');
-                        return;
-                    }
+                let data;
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch {
+                    alert('Server returned invalid response.');
+                    imageInput.value = '';
+                    return;
+                }
 
-                    if (data.success && data.image_url) {
-                        previewImage.src = data.image_url;
-                    } else {
-                        alert(data.error || 'Unknown error occurred');
-                        imageInput.value = '';
-                    }
+                if (xhr.status === 200 && data.success && data.image_url) {
+                    previewImage.src = data.image_url;
                 } else {
-                    alert(`Upload failed: ${xhr.status}`);
+                    alert(data.error || `Upload failed: ${xhr.status}`);
                     imageInput.value = '';
                 }
             }
         };
 
-        xhr.open('POST', 'src/APIs/imageCreator.api.php', true);
+        xhr.open('POST', '/image/preview', true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // ensures Laravel sees AJAX
         xhr.send(formData);
     });
 });
