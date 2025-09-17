@@ -1,19 +1,19 @@
 <nav space-y-2>
-    <a href="{{route('home')}}"> Browse</a>
+    <a href="{{route('home')}}">Browse <i class="fa fa-list-alt"></i></a>
     @auth
-        <a href="">My Homepage</a>
+        <a href="">My Homepage <i class="fa fa-home"></i></a>
     @endauth
-    <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'myart', 'page' => 1]); ?>">My art</a>
-    <a href="{{route('categories')}}">Categories</a>
-    <a href="{{route('contact_us')}}">Contact us</a>
-    @if(Auth::id()=='1')
+    <a href="#my_art">My art <i class="fa fa-paint-brush"></i></a>
+    <a href="{{route('categories')}}">Categories <i class="fa fa-list-ol"></i></a>
+    <a href="{{route('contact_us')}}">Contact us <i class="fa fa-envelope-open"></i></a>
+    <?php /*@if(Auth::id()=='1')
         <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'control']); ?>">Control Panel</a>
-    @endif
-        <a href="{{route('post.createView')}}">Create Post</a>
+    @endif */ ?>
+        <a href="{{route('post.createView')}}">Create Post <i class="fa fa-plus"></i></a>
     @auth
-        <a href="#link_to_profile">My profile</a>
-        <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'liked_posts', 'page' => 1]); ?>">My likes</a>
-        <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'following', 'page' => 1]); ?>">Following</a>
-        <a href="index.php?<?php echo http_build_query(['route' => 'client' , 'pages' => 'followers', 'page' => 1]); ?>">Followers</a>
+        <a href="#link_to_profile">My profile <i class="fa fa-user-circle"></i></a>
+        <a href="#liked_posts">My likes <i class="fa fa-heart"></i></a>
+        <a href="#following">Following <i class="fa fa-user-plus"></i></a>
+        <a href="#followers">Followers <i class="fa fa-users"></i></a>
     @endauth
 </nav>

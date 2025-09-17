@@ -20,11 +20,23 @@
         </div>
         <div class="profile-pic">
             @auth
-                <img id="profile-toggle" src="" alt="Profile Picture">
+                @php
+                    $user = auth()->user();
+                @endphp
+                @if ($user->image_folder)
+                    <img src="{{asset('storage/' . $user->image_folder)}}" alt="Avatar" class="w-full rounded-lg mb-4 m-auto"/>
+                @else
+                    <img id="profile-toggle" src="{{asset('storage/user/alt/blank.jpeg')}}" alt="Profile Picture">
+                @endif
                 <nav id="side-nav-profile">
-                    <a href="#create_post">Create Post</a>
-                    <a href="#link_to_profile">My profile</a>
-                    <a href="{{route('logout')}}">Logout</a>
+                    <a href="#create_post"><i class="fa fa-plus"></i> Create Post</a>
+                    <a href="#link_to_profile"><i class="fa fa-user-circle"></i> My profile</a>
+                    <a><form method="POST" action="{{route('logout')}}">
+                        @csrf
+                        <button type="submit">
+                            <i class="fa fa-sign-out"></i> Logout    
+                        </button>
+                    </form></a>
                 </nav>
             @endauth
             @guest
