@@ -67,18 +67,16 @@
 
     </div>
 </div>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script>
-const postId = {{(int) $post->id}};
-const postOwner =  {{$post->user_nickname}};
-const userNickname = {{  auth()->user()->nickname ?? ''}};
-const isAdmin = '';
-const list = document.getElementById('comments-list');
-const form = document.getElementById('comment-form');
-const input = document.getElementById('comment-input');
+const postId = {{ (int) $post->id }};
+const postOwner = @json($post->user_nickname);
+const userNickname = @json(auth()->user()->nickname ?? '');
+//const isAdmin = '';
+const likeImg = document.querySelector('#like-toggle img');
 const likeToggleButton = document.getElementById('like-toggle');
 const likeCountDisplay = document.getElementById('like-count');
 let userLiked = 0; 
 </script>
-<script src="{{ asset('js/comments.js')}}"></script>
 <script src="{{ asset('js/likes.js')}}"></script>
+<script src="{{ asset('js/comments.js')}}"></script>

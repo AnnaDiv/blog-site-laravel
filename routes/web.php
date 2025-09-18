@@ -7,12 +7,16 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LikesController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
 Route::get('/search/users', [UsersController::class, 'search'])->name('search.users');
 Route::get('/search/posts', [EntriesController::class, 'search'])->name('search.posts');
 Route::get('/post/view/{post}', [EntriesController::class, 'view'])->name('post.view');
+
+Route::get('/like/{post}', [LikesController::class, 'getLikes'])->name('likes.get');
+Route::post('/like/toggle', [LikesController::class, 'toggleLike'])->name('likes.toggle');
 
 //etc views
 Route::get('contact_us', function () {

@@ -12,3 +12,9 @@
         </form>
     @endauth
 </div>
+
+<script>
+const list = document.getElementById('comments-list');
+const form = document.getElementById('comment-form');
+const input = document.getElementById('comment-input');
+</script>

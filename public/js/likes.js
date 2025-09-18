@@ -1,5 +1,5 @@
 function fetchLikes() {
-  fetch('src/APIs/likes.api.php?action=getLikes&post_id=' + postId)
+  fetch(`/like/${postId}`)
     .then(res => res.json())
     .then(data => {
       if (!Array.isArray(data) || data.length < 2) {
@@ -7,30 +7,33 @@ function fetchLikes() {
         return;
       }
 
-      userLiked = parseInt(data[0]);  // Ensure it's a number
-      const totalLikes = data[1];
+      userLiked = parseInt(data[0] ?? 0);
+      const totalLikes = data[1] ?? 0;
 
-      document.getElementById('like-count').textContent = `${totalLikes} likes`;
-
-      const likeImg = document.querySelector('#like-toggle img');
-      if (userLiked === 1) {
-        likeImg.src = './content/post/likeheart.png';
-      } else {
-        likeImg.src = './content/post/nolikeheart.png';
+      if (likeCountDisplay) {
+        likeCountDisplay.textContent = `${totalLikes} likes`;
       }
-    });
+
+      if (likeImg) {
+        likeImg.src = userLiked === 1
+          ? "/storage/post/likeheart.png"
+          : "/storage/post/nolikeheart.png";
+      }
+    })
+    .catch(err => console.error('Failed to fetch likes:', err));
 }
 
 if (likeToggleButton) {
   likeToggleButton.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch('src/APIs/likes.api.php', {
+    fetch('/like/toggle', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'like',
-        like: userLiked,   // this is the variable we updated in fetchLikes
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
         post_id: postId,
         post_owner: postOwner
       })
@@ -38,12 +41,25 @@ if (likeToggleButton) {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        fetchLikes(); // refresh like state
+        userLiked = data.liked;
+
+        if (likeImg) {
+          likeImg.src = userLiked === 1
+            ? "/storage/post/likeheart.png"
+            : "/storage/post/nolikeheart.png";
+        }
+
+        // Update like count visually without re-fetching
+        if (likeCountDisplay) {
+          const currentCount = parseInt(likeCountDisplay.textContent) || 0;
+          likeCountDisplay.textContent = `${currentCount + (userLiked === 1 ? 1 : -1)} likes`;
+        }
       } else {
         alert(data.error || 'Failed to toggle like');
       }
-    });
+    })
+    .catch(err => console.error('Like toggle failed:', err));
   });
 }
 
-fetchLikes(); // Initial load
+fetchLikes();

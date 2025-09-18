@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\Like;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -96,5 +98,10 @@ class User extends Authenticatable
             ->wherePivot('status', 1)
             ->where('blockingUser', $otherUser->nickname)
             ->exists();
+    }
+
+    public function likes() : HasMany 
+    {
+        return $this->hasMany(Like::class, 'user_id');
     }
 }
