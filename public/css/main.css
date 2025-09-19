@@ -195,6 +195,7 @@
 
 .masonry-item:hover {
   transform: scale(1.02);
+  z-index: 20;
 }
 
 .item_image {
@@ -294,7 +295,7 @@
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   font-size: 0.9rem;
   white-space: nowrap;
-  z-index: 10;
+  z-index: 25;
 }
 
 .hover-wrapper:hover .hover-info {

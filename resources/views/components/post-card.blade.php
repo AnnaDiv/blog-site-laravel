@@ -27,8 +27,8 @@
         <div class="hover-wrapper">
             <img class="dots" src="{{asset('storage/post/3dots_.png')}}" alt="Options">
             <div class="hover-info">
-                <span>Likes: {{ $post->likes }}</span><br>
-                <span>Comments: {{ $post->comments }}</span><br>
+                <span>Likes: {{ $post->likes_count }}</span><br>
+                <span>Comments: {{ $post->comments_count }}</span><br>
                 <span>Time: {{ $post->time }}</span>
             </div>
         </div>

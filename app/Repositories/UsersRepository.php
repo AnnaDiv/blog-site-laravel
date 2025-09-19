@@ -17,8 +17,8 @@ class UsersRepository
                 'user.nickname',
                 'user.motto',
                 'user.image_folder',
-                'user.likes',
-                'user.comments'
+                'user.likes_count',
+                'user.comments_count'
             ])
             ->where('status', 'active')
             ->where(function ($q) use ($like) {

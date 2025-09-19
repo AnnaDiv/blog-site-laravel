@@ -26,7 +26,7 @@ class LikesHelper
             ->where('like', 1)
             ->count();
 
-        Post::where('id', $post_id)->update(['likes' => $likes]);
+        Post::where('id', $post_id)->update(['likes_count' => $likes]);
  
         return $likes;
     }

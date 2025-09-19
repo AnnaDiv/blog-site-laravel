@@ -25,8 +25,8 @@ class EntriesRepository
                 'posts.title',
                 'posts.content',
                 'posts.image_folder',
-                'posts.likes',
-                'posts.comments',
+                'posts.likes_count',
+                'posts.comments_count',
                 DB::raw('DATE_FORMAT(posts.time, "%Y-%m-%dT%H:%i:%s") AS time'),
             ])
             ->with('percategory')
