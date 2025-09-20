@@ -102,6 +102,10 @@ class User extends Authenticatable
 
     public function likes() : HasMany 
     {
-        return $this->hasMany(Like::class, 'user_id');
+        return $this->hasMany(Like::class);
+    }
+
+    public function comments() : HasMany {
+        return $this->hasMany(Comment::class);
     }
 }

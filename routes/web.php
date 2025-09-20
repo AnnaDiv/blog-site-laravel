@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -17,6 +18,10 @@ Route::get('/post/view/{post}', [EntriesController::class, 'view'])->name('post.
 
 Route::get('/like/{post}', [LikesController::class, 'getLikes'])->name('likes.get');
 Route::post('/like/toggle', [LikesController::class, 'toggleLike'])->name('likes.toggle');
+
+Route::get('/comment/{post}', [CommentController::class, 'getComments'])->name('comments.get');
+Route::post('/comment/add', [CommentController::class, 'addComment'])->name('comment.add');
+Route::post('/comment/remove', [CommentController::class, 'removeComment'])->name('comment.remove');
 
 //etc views
 Route::get('contact_us', function () {

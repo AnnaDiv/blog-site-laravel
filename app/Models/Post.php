@@ -18,8 +18,8 @@ class Post extends Model
         'title',
         'content',
         'image_folder',
-        'likes',
-        'comments',
+        'likes_count',
+        'comments_count',
         'status',
         'deleted',
         'type'
@@ -33,10 +33,14 @@ class Post extends Model
 
     public function percategory()
     {
-        return $this->hasMany(PerCategory::class, 'post_id', 'id');
+        return $this->hasMany(PerCategory::class);
     }
 
     public function likes() : HasMany {
-        return $this->hasMany(Like::class, 'post_id');
+        return $this->hasMany(Like::class);
+    }
+
+    public function comments() : HasMany {
+        return $this->hasMany(Comment::class);
     }
 }

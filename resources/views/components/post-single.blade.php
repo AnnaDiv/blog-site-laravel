@@ -61,8 +61,9 @@
                     @endforeach
                 </div>
             </div>
-        
+         
             <x-post-comment-section />
+
         </div>
 
     </div>
@@ -71,7 +72,10 @@
 <script>
 const postId = {{ (int) $post->id }};
 const postOwner = @json($post->user_nickname);
-const userNickname = @json(auth()->user()->nickname ?? '');
+const userId = @json(auth()->user()->id ?? null);
+const list = document.getElementById('comments-list');
+const form = document.getElementById('comment-form');
+const input = document.getElementById('comment-input');
 //const isAdmin = '';
 const likeImg = document.querySelector('#like-toggle img');
 const likeToggleButton = document.getElementById('like-toggle');

@@ -66,14 +66,14 @@ class LikesHelper
         $link = "{{route('post.view', $post_id)}}";
         $message = "{$sender_nickname} liked your post";
         /*
-        $notification_action = Notification_Actions::create([
+        $notification_action = Notification_Action::create([
             'place' => "like{$post_id}",
             'content' => $message
         ]);
 
         Notification::create([
-            'users_nickname' => $post_owner,
-            'senders_nickname' => $sender_nickname,
+            'user_nickname' => $post_owner,
+            'sender_nickname' => $sender_nickname,
             'actions_id' => $notification_action->id,
             'link' => $link,
         ]); */
