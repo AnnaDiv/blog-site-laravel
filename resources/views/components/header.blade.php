@@ -29,8 +29,8 @@
                     <img id="profile-toggle" src="{{asset('storage/user/alt/blank.jpeg')}}" alt="Profile Picture">
                 @endif
                 <nav id="side-nav-profile">
-                    <a href="#create_post"><i class="fa fa-plus"></i> Create Post</a>
-                    <a href="#link_to_profile"><i class="fa fa-user-circle"></i> My profile</a>
+                    <a href="{{route('post.createView')}}"><i class="fa fa-plus"></i> Create Post</a>
+                    <a href="{{route('profile.public', $user->nickname)}}"><i class="fa fa-user-circle"></i> My profile</a>
                     <a><form method="POST" action="{{route('logout')}}">
                         @csrf
                         <button type="submit">

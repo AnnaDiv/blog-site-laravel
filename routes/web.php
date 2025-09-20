@@ -9,6 +9,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -22,6 +23,8 @@ Route::post('/like/toggle', [LikesController::class, 'toggleLike'])->name('likes
 Route::get('/comment/{post}', [CommentController::class, 'getComments'])->name('comments.get');
 Route::post('/comment/add', [CommentController::class, 'addComment'])->name('comment.add');
 Route::post('/comment/remove', [CommentController::class, 'removeComment'])->name('comment.remove');
+
+Route::get('/profile/{user_nickname}', [ProfileController::class, 'public'])->name('profile.public');
 
 //etc views
 Route::get('contact_us', function () {
@@ -42,5 +45,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::get('/post/create', [EntriesController::class, 'createPostView'])->name('post.createView');
     Route::post('/post/create', [EntriesController::class, 'create'])->name('post.create');
     Route::post('/image/preview', [ImageController::class, 'preview'])->name('image.preview');
+
+    Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
+    Route::get('profile/private/{user_nickname}', [ProfileController::class, 'private'])->name('profile.private');
+
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
+use App\Models\User;
+use App\Models\Profile;
 
 class RegisterController extends Controller
 {
@@ -31,6 +32,9 @@ class RegisterController extends Controller
 
         //make user
         $user = User::create($validatedData);
+        Profile::create([
+            'user_id' => $user->id,
+        ]);
 
         return redirect()->route('login')->with('success', 'Registered successfully you can now log in');
     }

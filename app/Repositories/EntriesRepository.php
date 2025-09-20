@@ -125,4 +125,53 @@ class EntriesRepository
 
         return $post;
     }
+
+
+    protected function postQuery(User $user)
+    {
+        return Post::select([
+                'posts.id',
+                'posts.user_nickname',
+                'posts.title',
+                'posts.content',
+                'posts.image_folder',
+                'posts.status',
+            ])
+            ->with('percategory')
+            ->where('user_nickname', $user->nickname);
+    }
+
+    public function allPostsPerUser($user_id){
+
+        $user = User::findOrFail($user_id);
+
+        $posts = $this->postQuery($user)
+            ->get();
+        
+        return $posts;
+    }
+
+    public function privatePosts($user_id) {
+
+        $user = User::findOrFail($user_id);
+
+        $posts = $this->postQuery($user)
+            ->where('status', 'private')
+            ->where('deleted', false)
+            ->paginate(15);
+        
+        return $posts;
+    }
+
+    public function publicPosts($user_id) {
+        
+        $user = User::findOrFail($user_id);
+
+        $posts = $this->postQuery($user)
+            ->where('status', 'public')
+            ->where('deleted', false)
+            ->paginate(15);
+
+        return $posts;
+    }
 }

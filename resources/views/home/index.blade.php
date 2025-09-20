@@ -5,9 +5,13 @@
 
     <div class="masonry-wrapper">
         <div class="masonry-container">
-            @foreach($entries as $entry)
+            @forelse ($entries as $entry)
                 <x-post-card :post="$entry"/>
-            @endforeach
+            @empty
+                <div class="bg-white">
+                    Sorry, there are no posts.
+                </div>
+            @endforelse
         </div>
     </div>
 

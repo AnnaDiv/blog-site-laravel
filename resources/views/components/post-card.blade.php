@@ -20,7 +20,7 @@
     </div>
     <div class="post-categories2">
         <div class="post-owner">
-            By: <a href="#link_taking_to_owners_profile">
+            By: <a href="{{route('profile.public', $post->user_nickname)}}">
             {{ $post->user_nickname }}
             </a>
         </div>
