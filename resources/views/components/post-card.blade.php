@@ -11,11 +11,11 @@
     <div class="post-categories">
         @foreach($post->categories as $category)
             @if ($category->title !== 'none')
-                <a class="category-badge" href="#category_title_page">
+                <a class="category-badge" href="{{ route('category', $category->id) }}">
                     {{ $category->title }}
                 </a>
             @endif
-            @if(!$loop->last), @endif
+            <?php /* @if(!$loop->last), @endif */ ?>
         @endforeach
     </div>
     <div class="post-categories2">

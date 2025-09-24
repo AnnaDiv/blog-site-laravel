@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class UsersRepository
@@ -14,12 +13,11 @@ class UsersRepository
         $like = '%' . $quote . '%';
         $query = User::query()
             ->select([
-                'user.nickname',
-                'user.motto',
-                'user.image_folder',
-                'user.likes_count',
-                'user.comments_count'
+                'users.nickname',
+                'users.motto',
+                'users.image_folder'
             ])
+            ->withCount(['likes', 'comments', 'posts'])
             ->where('status', 'active')
             ->where(function ($q) use ($like) {
                 $q->where('nickname', 'like', $like)
@@ -30,7 +28,7 @@ class UsersRepository
             $query->whereNotIn('nickname', $excludedUsers);
         }
         $users  = $query->paginate($perPage);
-
+        //dd($users);
         return $users;
     }
 

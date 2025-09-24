@@ -18,7 +18,7 @@ for ($i = 0; $i < $rows; $i++) {
         <form method="GET" action="{{ route('categories.search') }}">
             @csrf
             <input type="text" pattern=".{3,}" name="search_q"
-                   value="{{ old('search_q') }}" required pattern=".{3,}"
+                   value="{{ old('search_q') ?? request('search_q')}}" required pattern=".{3,}"
                    required title="3 characters minimum" placeholder="Search categories..." />
             <button type="submit" class="user-search-btn">Search Categories</button>
         </form>
@@ -32,12 +32,7 @@ for ($i = 0; $i < $rows; $i++) {
             <?php foreach ($row as $category): ?>
                 <div class="category-cell">
                     <?php if ($category): ?>
-                        <a href="index.php?<?php echo http_build_query([
-                            'route' => 'client',
-                            'pages' => 'category',
-                            'category' => $category->title,
-                            'page' => 1
-                        ]); ?>">
+                        <a href="{{ route('category', $category->id) }}">
                             {{ $category->title }}
                         </a>
                     <?php endif; ?>
@@ -51,12 +46,7 @@ for ($i = 0; $i < $rows; $i++) {
 <div class="category-grid-mobile">
     <?php foreach ($categories as $category): ?>
         <div class="category-cell">
-            <a href="index.php?<?php echo http_build_query([
-                'route' => 'client',
-                'pages' => 'category',
-                'category' => $category->title,
-                'page' => 1
-            ]); ?>">
+            <a href="{{ route('category', $category->id) }}">
                 {{ $category->title }}
             </a>
         </div>

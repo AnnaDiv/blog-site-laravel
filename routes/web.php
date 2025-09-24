@@ -33,6 +33,8 @@ Route::get('contact_us', function () {
 Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
 Route::get('/categories/search', [CategoriesController::class, 'search'])->name('categories.search');
 
+Route::get('/category/{category_id}', [EntriesController::class, 'category'])->name('category');
+
 Route::middleware('guest')->group(function () { // only someone who isnt logged in can visit them
     Route::get('/register', [RegisterController::class, 'register'])->name('register');
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');

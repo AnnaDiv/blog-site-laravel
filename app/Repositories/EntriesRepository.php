@@ -5,7 +5,6 @@ namespace App\Repositories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 use App\Models\Post;
 use App\Models\User;
@@ -14,6 +13,8 @@ use App\Models\Category;
 
 class EntriesRepository
 {
+
+    protected $perPage = 15;
 
     public function browse(int $perPage, array $excludedUsers = [])
     {
@@ -29,7 +30,7 @@ class EntriesRepository
                 'posts.comments_count',
                 DB::raw('DATE_FORMAT(posts.time, "%Y-%m-%dT%H:%i:%s") AS time'),
             ])
-            ->with('percategory')
+            ->with('categories')
             ->where('deleted', false)
             ->where('status', 'public')
             ->where('type', 'post');
@@ -116,11 +117,9 @@ class EntriesRepository
             $category = ucfirst(trim($category));
             $category = Category::firstOrCreate(['title' => $category]);
 
-            PerCategory::create([
-                'category_id' => $category->id,
-                'post_id' => $post_id
-            ]);
+            $categories_ids[] = $category->id;
 
+            $post->categories()->attach($categories_ids);
         }
 
         return $post;
@@ -137,7 +136,7 @@ class EntriesRepository
                 'posts.image_folder',
                 'posts.status',
             ])
-            ->with('percategory')
+            ->with('categories')
             ->where('user_nickname', $user->nickname);
     }
 
@@ -173,5 +172,27 @@ class EntriesRepository
             ->paginate(15);
 
         return $posts;
+    }
+
+    public function categoryPosts(string $category_id, array $excludedUsers) {
+
+        $category = Category::where('id', $category_id)->first();
+
+        if (!$category){
+            return null;
+        }
+
+        $query = Post::query()->select('*')
+            ->with('categories') 
+            ->whereHas('categories', function ($q) use ($category) {
+                $q->where('categories.id', $category->id);
+        });
+
+        if (!empty($excludedUsers)){
+            $query->whereNotIn('user_nickname', $excludedUsers);
+        }
+
+        return $query->paginate(15);
+
     }
 }

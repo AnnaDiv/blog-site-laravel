@@ -5,8 +5,8 @@
 
     <div class="masonry-wrapper">
         <div class="masonry-container">
-            @forelse ($entries as $entry)
-                <x-post-card :post="$entry"/>
+            @forelse ($posts as $post)
+                <x-post-card :post="$post"/>
             @empty
                 <div class="bg-white">
                     Sorry, there are no posts.
@@ -17,5 +17,5 @@
 
 </div>
 
-{{ $entries->links() }}
+{{ $posts->links() }}
 </x-layout>

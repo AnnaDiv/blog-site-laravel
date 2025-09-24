@@ -30,11 +30,12 @@ class Post extends Model
         return $this->belongsToMany(Category::class, 'percategory', 'post_id', 'category_id');
     }
 
-
+    /*
     public function percategory()
     {
         return $this->hasMany(PerCategory::class);
     }
+    */
 
     public function likes() : HasMany {
         return $this->hasMany(Like::class);

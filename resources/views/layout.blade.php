@@ -34,11 +34,11 @@
 <body>
     <x-header />
     @if(request()->is('/') || request()->is('search/posts') || 
-        request()->is('search/users'))
+        request()->is('search/users') || request()->is('category/*'))
         <x-search-bar/>
     @endif
     <main>
-        {{-- Display alert messages --}}
+        <!-- Display alert messages -->  {{--  --}}
         @if(session('success'))
             <div class="alert"><x-alert type="success" message="{{session('success')}}" /></div>
         @endif

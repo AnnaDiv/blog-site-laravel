@@ -26,11 +26,11 @@ class EntriesController extends Controller
             $excludedUsers = [];
         }
 
-        $entries = $this->entriesRepository->browse($perPage, $excludedUsers);
+        $posts = $this->entriesRepository->browse($perPage, $excludedUsers);
 
         //$art_images = $this->entriesRepository->artBanner();
 
-        return view('home.index', ['entries' => $entries]);
+        return view('home.index', ['posts' => $posts]);
     }
 
     public function search(Request $request)
@@ -44,9 +44,9 @@ class EntriesController extends Controller
         } else {
             $excludedUsers = [];
         }
-        $entries = $this->entriesRepository->search($perPage, $quote, $excludedUsers);
+        $posts = $this->entriesRepository->search($perPage, $quote, $excludedUsers);
 
-        return view('home.index')->with('entries', $entries);
+        return view('home.index')->with('posts', $posts);
     }
 
     public function createPostView(Request $request): View
@@ -142,5 +142,21 @@ class EntriesController extends Controller
         }
 
         return back()->with('error', 'errors on posting');
+    }
+
+    public function category(Request $request, string $category_id) : View {
+
+        if ($request->user()) {
+            $user = $request->user();
+
+            $excludedUsers = $this->entriesRepository->excludedUsers($user->nickname);
+        }
+        else {
+            $excludedUsers = [];
+        }
+
+        $posts = $this->entriesRepository->categoryPosts($category_id, $excludedUsers);
+
+        return view('home.index')->with('posts', $posts);
     }
 }
