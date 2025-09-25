@@ -7,6 +7,8 @@ use Illuminate\View\View;
 use App\Repositories\EntriesRepository;
 use Illuminate\Http\RedirectResponse;
 use App\Support\ImageCreator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Post;
 use App\Models\User;
@@ -14,6 +16,8 @@ use App\Models\Category;
 
 class EntriesController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(protected EntriesRepository $entriesRepository) {}
 
     public function browse(Request $request): View
@@ -141,7 +145,7 @@ class EntriesController extends Controller
             $errors[] = "not everything is filled";
         }
 
-        return back()->with('error', 'errors on posting');
+        return back()->with('error', $errors);
     }
 
     public function category(Request $request, string $category_id) : View {
@@ -158,5 +162,116 @@ class EntriesController extends Controller
         $posts = $this->entriesRepository->categoryPosts($category_id, $excludedUsers);
 
         return view('home.index')->with('posts', $posts);
+    }
+
+    public function editPostView(Request $request, $post_id) : View {
+
+        $user = $request->user();
+        if(!$user){
+            return view('login.login');
+        }
+
+        $post = Post::where('id', $post_id)->first();
+
+        $allcategories = Category::query()
+            ->pluck('title')
+            ->toArray();
+
+        return view('post.edit-post', ['post' => $post])->with('allcategories', $allcategories);
+    }
+
+    public function edit(Post $post, Request $request, ImageCreator $creator) : RedirectResponse {
+
+        $this->authorize('update', $post);
+
+        $user = $request->user();
+        //all inputs
+        $title = ($request->input('title') ?? '');
+        $description = ($request->input('description') ?? '');
+        $categories = json_decode($request->input('categories'), true);
+        $post_status = $request->input('post_status');
+
+        $all_cats = Category::query()
+            ->pluck('title')
+            ->toArray();
+
+        $final_categories = [];
+
+        foreach ($categories as $category) {
+
+            $category = ucfirst(strtolower($category));
+            if (in_array($category, $all_cats)) {
+                $final_categories[] = ucfirst(strtolower($category));
+            } else {
+                $category = ucfirst(strtolower($category));
+                Category::create([
+                    'title' => $category,
+                    'description' => ' ',
+                ]);
+
+                $final_categories[] = ucfirst(strtolower($category));
+            }
+        }
+        if (empty($final_categories)) {
+            $final_categories[] = 'None';
+        }
+
+        if ($post_status != 'public' && $post_status != 'private') {
+            $post_status = 'private';
+        }
+
+        if (!empty($title) && !empty($description)) {
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageSubmit = $creator->createImage($image, $user->id);
+            }
+
+            if ($request->hasFile('image') && !empty($imageSubmit)) {
+                
+                $post = $this->entriesRepository->update($post, $imageSubmit, $title, $description, $final_categories, $post_status);
+
+                if ($post !== false) {
+                    return redirect()->route('post.view', ['post' => $post]);
+                } else {
+                    $errors[] = "entry couldnt be created";
+                    return back()->with('error', $errors);
+                }
+            }
+            elseif ($request->hasFile('image') && empty($imageSubmit)) {
+                $errors[] = "something is wrong with your image, submit a different one";
+                return back()->with('error', $errors);
+            }
+            else {
+
+                $new_post = $this->entriesRepository->update($post, false, $title, $description, $final_categories, $post_status);
+
+                if ($new_post !== false) {
+                    return redirect()->route('post.view', ['post' => $new_post]);
+                } else {
+                    $errors[] = "entry couldnt be created";
+                    return back()->with('error', $errors);
+                }
+            }
+        }
+        else {
+            $errors[] = "not everything is filled";
+        }
+
+        return back()->with('error', $errors);
+    }
+
+    public function remove(Post $post) : RedirectResponse { // will switch later to accomodate admin functions of permadelete
+        
+        $this->authorize('delete', $post);
+
+        if(!$post){
+            return back()->with('error', "couldnt delete post");
+        }
+        else{
+            Storage::disk('public')->delete($post->image_folder);
+            $post->delete();
+            return redirect()->route('home');
+        }
     }
 }

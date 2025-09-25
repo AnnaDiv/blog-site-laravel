@@ -11,8 +11,8 @@
                 @can('update', $post)
                     <div>
                         <div class="action-buttons-single">
-                                <a href="#"><button>Edit</button></a>
-                            <form method="POST" action="#posts.deletepost->id">
+                            <a href="{{ route('post.editView', $post->id) }}"><button>Edit</button></a>
+                            <form method="POST" action="{{ route('post.remove', $post) }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit">Delete</button>

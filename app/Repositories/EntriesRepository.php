@@ -195,4 +195,55 @@ class EntriesRepository
         return $query->paginate(15);
 
     }
+
+    public function update($post, $imageSubmit, string $title, string $content, array $categories, string $status) {
+
+        if($imageSubmit!=false){
+            Storage::disk('public')->delete($post->image_folder);
+
+            $savePath = Storage::disk('public')->path(str_replace('storage/', '', $imageSubmit['image_folder']));
+            $image_uploaded = imagejpeg($imageSubmit['new_image'], $savePath);
+
+            //cleanup
+            imagedestroy($imageSubmit['old_image']);
+            imagedestroy($imageSubmit['new_image']);
+
+            $image_folder = $imageSubmit['image_folder'];
+        }
+        else{
+            $image_folder = '';
+        }
+
+        $categories_ids = [];
+
+        //attaching new
+        foreach ($categories AS $category){
+            $category = ucfirst(trim($category));
+            $category = Category::firstOrCreate(['title' => $category]);
+
+            $categories_ids[] = $category->id;
+        }
+
+        //synch cats
+        $post->categories()->sync($categories_ids);
+
+        if (!empty($image_folder)){
+            $post->update([
+                'title' => $title,
+                'content' => $content,
+                'image_folder' => $image_folder,
+                'status' => $status
+            ]);
+        }
+        else {
+            $post->update([
+                'title' => $title,
+                'content' => $content,
+                'status' => $status
+            ]);  
+        }
+
+        return $post;
+    }
+
 }

@@ -51,5 +51,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
     Route::get('profile/private/{user_nickname}', [ProfileController::class, 'private'])->name('profile.private');
 
+    Route::get('/post/edit/{post}', [EntriesController::class, 'editPostView'])->name('post.editView');
+    Route::put('/post/edit/{post}', [EntriesController::class, 'edit'])->name('post.edit');
+    Route::delete('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
+
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
