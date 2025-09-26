@@ -9,15 +9,22 @@
                 <img class="user_Profile-info__image" src="{{asset('storage/user/alt/blank.jpeg')}}" alt=""/>
             @endif
         </div>
-        <div class="user_Profile-info__desc">
-            <p class="motto">Motto: {{$profile_owner->motto }}</p>
-        </div>
+        @if($profile_owner->motto)
+            <div class="user_Profile-info__desc">
+                <p class="motto">Motto: {{$profile_owner->motto }}</p>
+            </div>
+        @endif
     </div>
     @can('update', $profile)
         <a class="user_Profile-update" href="#edit_profile">
             <button>Update your profile</button>
         </a>
     @endcan
+    @guest
+        <div class="follow-wrapper">
+            <div id="followers_text">Followers:&nbsp</div><span id="follow-count">0</span> <br><br><br><br>
+        </div>
+    @endguest
     @auth
         @if (auth()->user()->id != $profile->user_id)
             <div class="follow-wrapper">
@@ -66,7 +73,10 @@
     {{ $posts->links() }}
 </div>
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <script>
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const profileUserNickname = @json($profile_owner->nickname);
 const currentUserNickname = @json(auth()->user()->nickname ?? null);
 /*console.log("Using postId:", postId); */

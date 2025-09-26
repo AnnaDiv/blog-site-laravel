@@ -10,6 +10,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FollowController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -54,6 +55,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::get('/post/edit/{post}', [EntriesController::class, 'editPostView'])->name('post.editView');
     Route::put('/post/edit/{post}', [EntriesController::class, 'edit'])->name('post.edit');
     Route::delete('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
+
+    Route::get('/follow', [FollowController::class, 'getFollows'])->name('follow.get');
+    Route::post('/follow', [FollowController::class, 'toggleFollow'])->name('follow.toggle');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

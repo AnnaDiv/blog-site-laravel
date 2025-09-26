@@ -1,70 +1,57 @@
 function fetchFollows() {
-  fetch(
-    'src/APIs/follow.api.php?action=getFollow&profileUser=' +
-      profileUserNickname +
-      '&follower=' +
-      currentUserNickname
-  )
-    .then(res => res.text())
-    .then(text => {
-      console.log('GET raw response:', text); // 👀 See full PHP output
+  fetch("/follow?profileUser=" + profileUserNickname + "&follower=" + currentUserNickname, {
+    headers: { "X-Requested-With": "XMLHttpRequest" }
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log('GET parsed JSON:', data);
 
-      try {
-        const data = JSON.parse(text);
-        console.log('GET parsed JSON:', data);
-
-        if (!Array.isArray(data) || data.length < 2) {
-          console.error('Unexpected data format:', data);
-          return;
-        }
-
-        userFollows = parseInt(data[0]);
-        const totalFollows = data[1];
-
-        document.getElementById('follow-count').textContent =
-          `${totalFollows} follows`;
-
-        const FollowImg = document.querySelector('#follow-toggle img');
-        FollowImg.src =
-          userFollows === 1
-            ? './content/post/follow.png'
-            : './content/post/not_follow.png';
-      } catch (err) {
-        console.error('JSON parse failed! Raw response was:', text);
+      if (!Array.isArray(data) || data.length < 2) {
+        console.error('Unexpected data format:', data);
+        return;
       }
-    });
+
+      userFollows = Boolean(data[0]);
+      const totalFollows = data[1];
+
+      document.getElementById('follow-count').textContent =
+        `${totalFollows} follows`;
+
+      const FollowImg = document.querySelector('#follow-toggle img');
+      FollowImg.src =
+        userFollows === true
+          ? '/storage/post/follow.png'
+          : '/storage/post/not_follow.png';
+    })
+    .catch(err => console.error("GET request failed:", err));
 }
 
 if (FollowToggleButton) {
-  FollowToggleButton.addEventListener('click', function (e) {
+  FollowToggleButton.addEventListener("click", function (e) {
     e.preventDefault();
 
-    fetch('src/APIs/follow.api.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'follow',
+    fetch("/follow", {
+      method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: JSON.stringify({
         follower: currentUserNickname,
         profileUser: profileUserNickname,
       }),
     })
-      .then(res => res.text())
-      .then(text => {
-        console.log('POST raw response:', text);
-
-        try {
-          const data = JSON.parse(text);
-          console.log('POST parsed JSON:', data);
-
-          if (data.success) {
-            fetchFollows();
-          } else {
-            alert(data.error || 'Failed to toggle follow');
-          }
-        } catch (err) {
-          console.error('JSON parse failed! Raw response was:', text);
+      .then(res => res.json())
+      .then(data => {
+        console.log('POST parsed JSON:', data);
+        if (data.success) {
+          fetchFollows();
+        } else {
+          alert(data.error || "Failed to toggle follow");
         }
-      });
+      })
+      .catch(err => console.error("POST request failed:", err));
   });
 }
 
