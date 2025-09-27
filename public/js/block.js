@@ -1,9 +1,5 @@
 function fetchBlock() {
-  fetch(
-    'src/APIs/block.api.php?action=getBlock&profileUser=' +
-      profileUserNickname +
-      '&blockingUser=' +
-      currentUserNickname
+  fetch('/block?profileUser=' + profileUserNickname + '&blockingUser=' + currentUserNickname
   )
     .then(res => res.text())
     .then(text => {
@@ -18,17 +14,14 @@ function fetchBlock() {
           return;
         }
 
-        const isBlocked = parseInt(data[0]);
+        const isBlocked = Boolean(data[0]);
 
         const BlockImg = document.querySelector('#block-toggle img');
         const FollowImg = document.querySelector('#follow-toggle img');
 
-        BlockImg.src =
-          isBlocked === 1
-            ? './content/post/blocked.png'
-            : './content/post/unblocked.png';
-        if (isBlocked === 1) {
-            FollowImg.src = './content/post/not_follow.png';
+        BlockImg.src = isBlocked ? BlockedImgUrl : UnblockedImgUrl;
+        if (isBlocked) {
+            FollowImg.src = NotFollowImgUrl;
         }
       } catch (err) {
         console.error('JSON parse failed! Raw response was:', text);
@@ -40,11 +33,14 @@ if (BlockToggleButton) {
   BlockToggleButton.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch('src/APIs/block.api.php', {
+    fetch('/block', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        action: 'block',
+      headers: {         
+        "X-CSRF-TOKEN": csrfToken,
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest", 
+      },
+      body: JSON.stringify({
         blockingUser: currentUserNickname,
         profileUser: profileUserNickname,
       }),
@@ -58,6 +54,12 @@ if (BlockToggleButton) {
           console.log('POST parsed JSON:', data);
 
           if (data.success) {
+            if (data.remove) {
+                const count = parseInt(FollowCountDisplay.textContent, 10);
+                if (!isNaN(count) && count > 0) {
+                    FollowCountDisplay.textContent = count - 1;
+                }
+            }
             fetchBlock();
           } else {
             alert(data.error || 'Failed to toggle block');

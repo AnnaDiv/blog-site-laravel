@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Support\BlocksHelper;
+
 use App\Models\User;
 
 class FollowsHelper
@@ -20,6 +22,9 @@ class FollowsHelper
         }
         else {
             $follower->following()->attach($profileUser->id);
+            if($profileUser->isBlockedBy($follower)){
+                $follower->blockedUsers()->detach($profileUser->nickname);
+            }
         }
 
         return $isFollowing;

@@ -28,7 +28,7 @@
     @auth
         @if (auth()->user()->id != $profile->user_id)
             <div class="follow-wrapper">
-                <div id="followers_text"> Followers: </div><span id="follow-count">0</span> <br><br><br><br>
+                <div id="followers_text"> Followers:&nbsp</div><span id="follow-count">0</span> <br><br><br><br>
                 <button id="follow-toggle">
                     <img class="like-button" src="{{asset('storage/post/not_follow.png')}}" alt="follow-image" />
                 </button>
@@ -85,6 +85,12 @@ const FollowCountDisplay = document.getElementById('follow-count');
 let isFollowing = 0;
 
 const BlockToggleButton = document.getElementById('block-toggle');
+
+const FollowImgUrl = @json(asset('storage/post/follow.png'));
+const NotFollowImgUrl = @json(asset('storage/post/not_follow.png'));
+
+const BlockedImgUrl = @json(asset('storage/post/blocked.png'));
+const UnblockedImgUrl = @json(asset('storage/post/unblocked.png'));
 </script>
 <script src="{{ asset('js/follow.js') }}"></script>
 <script src="{{ asset('js/block.js') }}"></script>

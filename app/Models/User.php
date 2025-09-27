@@ -60,25 +60,25 @@ class User extends Authenticatable
 
     public function blockedUsers(): BelongsToMany
     {
-        // this user (by nickname) -> blocks rows where blocks.user_nickname = users.nickname
-        // returns User models of those blocked (joined via blocks.blockingUser -> users.nickname)
-        return $this->belongsToMany(
-            User::class,     // related model
-            'blocks',        // pivot table
-            'user_nickname', // pivot column pointing to this user's nickname
-            'blockingUser',  // pivot column pointing to the other user's nickname
-            'nickname',      // local key on this model
-            'nickname'  // related key on related model
-        );
-    }
-
-    public function blockedBy()
-    {
+        // blocked users by this user
         return $this->belongsToMany(
             User::class,
             'blocks',
-            'blockingUser',  // pivot column that points to the "blocker"
-            'user_nickname', // pivot column that points to the "blocked"
+            'blockingUser',   // this users nickname
+            'user_nickname',  // blocked users nickname
+            'nickname',
+            'nickname'
+        );
+    }
+
+    public function blockedBy(): BelongsToMany
+    {
+        // blocked by other users 
+        return $this->belongsToMany(
+            User::class,
+            'blocks',
+            'user_nickname',  // this users nickname
+            'blockingUser',   // blocking users nickname
             'nickname',
             'nickname'
         );
@@ -87,15 +87,13 @@ class User extends Authenticatable
     public function hasBlocked(User $otherUser): bool
     {
         return $this->blockedUsers()
-            ->wherePivot('status', 1)
-            ->where('nickname', $otherUser->nickname)
+            ->where('user_nickname', $otherUser->nickname)
             ->exists();
     }
 
     public function isBlockedBy(User $otherUser): bool
     {
         return $this->blockedBy()
-            ->wherePivot('status', 1)
             ->where('blockingUser', $otherUser->nickname)
             ->exists();
     }

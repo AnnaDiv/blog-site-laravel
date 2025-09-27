@@ -18,10 +18,12 @@ function fetchFollows() {
         `${totalFollows} follows`;
 
       const FollowImg = document.querySelector('#follow-toggle img');
-      FollowImg.src =
-        userFollows === true
-          ? '/storage/post/follow.png'
-          : '/storage/post/not_follow.png';
+      const BlockImg = document.querySelector('#block-toggle img');
+
+      FollowImg.src = userFollows ? FollowImgUrl : NotFollowImgUrl;
+      if (userFollows) {
+        BlockImg.src = UnblockedImgUrl;
+      }
     })
     .catch(err => console.error("GET request failed:", err));
 }

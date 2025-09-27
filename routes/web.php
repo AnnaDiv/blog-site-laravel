@@ -11,6 +11,7 @@ use App\Http\Controllers\LikesController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\BlockController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -58,6 +59,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
 
     Route::get('/follow', [FollowController::class, 'getFollows'])->name('follow.get');
     Route::post('/follow', [FollowController::class, 'toggleFollow'])->name('follow.toggle');
+
+    Route::get('/block', [BlockController::class, 'getBlock'])->name('block.get');
+    Route::post('/block', [BlockController::class, 'toggleBlock'])->name('block.toggle');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
