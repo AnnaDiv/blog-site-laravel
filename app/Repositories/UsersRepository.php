@@ -37,11 +37,9 @@ class UsersRepository
         $user = User::where('nickname', $nickname)->first();
 
         $blockedUsers = $user->blockedUsers()
-            ->wherePivot('status', 1)
             ->pluck('nickname')
             ->all();
         $blockedBy = $user->blockedBy()
-            ->wherePivot('status', 1)
             ->pluck('nickname')
             ->all();
         $excludedUsers = array_values(array_unique(array_merge($blockedUsers, $blockedBy)));

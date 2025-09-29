@@ -52,11 +52,9 @@ class EntriesRepository
         }
 
         $blockedUsers = $user->blockedUsers()
-            ->wherePivot('status', 1)
             ->pluck('nickname')
             ->all();
         $blockedByUsers = $user->blockedBy()
-            ->wherePivot('status', 1)
             ->pluck('nickname')
             ->all();
 
