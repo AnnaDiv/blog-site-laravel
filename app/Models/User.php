@@ -126,4 +126,8 @@ class User extends Authenticatable
             ->where('user_id', $otherUser->id)
             ->exists();
     }
+
+    public function notifications() : HasMany {
+        return $this->hasMany(Notification::class, 'notification_owner_id', 'id');
+    }
 }

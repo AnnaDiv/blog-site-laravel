@@ -36,7 +36,7 @@ if (BlockToggleButton) {
     fetch('/block', {
       method: 'POST',
       headers: {         
-        "X-CSRF-TOKEN": csrfToken,
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
         "Content-Type": "application/json",
         "X-Requested-With": "XMLHttpRequest", 
       },

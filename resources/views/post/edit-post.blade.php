@@ -75,7 +75,6 @@
 
 </form>
 </x-layout>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <?php foreach ($errors AS $error) {
     echo $error;
 }

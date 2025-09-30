@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Notification;
 
 class CommentsHelper
 {
@@ -29,7 +30,10 @@ class CommentsHelper
             ->get();
     }
 
-    function addComment($content, $post_id, $user_id, $post_owner) {
+    function addComment($content, $post_id, User $user, User $post_owner) {
+
+        $user_id = $user->id;
+
         $comment = Comment::create([
             'post_id' => (int) $post_id,
             'user_id' => (int) $user_id,
@@ -44,37 +48,28 @@ class CommentsHelper
             ]);
         }
 
-        /*if ($this->addNotification($post_owner, $user_id, 'comment'. $post_id . '/' .$comment->id, $content) !== true){
-            return ['success' => false];
-        } */
+        if($user !== $post_owner){
+            $this->addNotification($post_owner, $user, $post_id, $comment, $content);
+        }
 
         return ['success' => true, 'comment_id' => $comment->id];
     }
     
-    function addNotification(string $post_owner, string $sender_id, string $place, string $content): bool {
-        
-        $sender = User::select('nickname')->where('id', $sender_id)->first();
+    function addNotification(User $post_owner, User $sender, $place, $comment): bool {
 
-        $message = "{$sender->nickname} commented on your post: '{$content}'";
-        if (preg_match('/comment(\d+)\/(\d+)/', $place, $matches)) {
-            $post_id = $matches[1];
-            $comment_id = $matches[2]; 
-        }
-        $link  = "{{route('post.view', $post_id)}}";
-        //$link = "index.php?route=client&pages=post&post_id={$post_id}#comment{$comment_id}";
-        /*
-        $notification_action = Notification_Action::create([
-            'place' => $place,
-            'content' => $message
-        ]);
+        $message = "{$sender->nickname} commented on your post: '{$comment->content}'";
+    
+        $link = "/post/view/$place#comment$comment->id";
 
         Notification::create([
-            'user_nickname' => $post_owner,
-            'sender_nickname' => $sender->nickname,
-            'actions_id' => $notification_action->id,
-            'link' => $link
-        ]);
-        */
+            'notification_owner_id' => $post_owner->id,
+            'sender_id' => $sender->id,
+            'content' => $message,
+            'place' => "comment",
+            'link' => $link,
+            'used' => 0
+        ]); 
+
         return true;
     }
 

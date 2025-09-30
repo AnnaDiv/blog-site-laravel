@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Support\CommentsHelper;
 
+use App\Models\User;
+
 class CommentController extends Controller
 {
     public function getComments($post_id, CommentsHelper $commentsHelper) {
@@ -34,8 +36,10 @@ class CommentController extends Controller
         $post_owner = $request->input('post_owner', '');
         $comment = $request->input('comment', '');
 
-        if ($comment !== '' && $post_id !== '' && $post_owner !== '') {
-            $result = $commentsHelper->addComment($comment, $post_id, $user->id, $post_owner);
+        $post_owner = User::where('nickname', $post_owner)->first();
+
+        if ($comment !== '' && $post_id !== '' && $post_owner) {
+            $result = $commentsHelper->addComment($comment, $post_id, $user, $post_owner);
             return response()->json($result);
         } else {
             return response()->json(['success' => false, 'error' => 'Missing data']);

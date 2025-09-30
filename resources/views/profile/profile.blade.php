@@ -73,10 +73,7 @@
     {{ $posts->links() }}
 </div>
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
 <script>
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const profileUserNickname = @json($profile_owner->nickname);
 const currentUserNickname = @json(auth()->user()->nickname ?? null);
 /*console.log("Using postId:", postId); */

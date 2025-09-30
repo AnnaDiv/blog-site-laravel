@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Support\LikesHelper;
 
+use App\Models\User;
+
 class LikesController extends Controller
 {
     
@@ -48,10 +50,10 @@ class LikesController extends Controller
         ]);
 
         $post_id = (int) $request->input('post_id');
-        $post_owner = $request->input('post_owner', '');
-        $user_nickname = $user->nickname;
+        $post_owner_nickname = $request->input('post_owner', '');
+        $post_owner = User::where('nickname', $post_owner_nickname)->first();
 
-        $result = $likesHelper->toggleLike($post_id, $user->id, $post_owner, $user_nickname);
+        $result = $likesHelper->toggleLike($post_id, $user, $post_owner);
 
         return response()->json($result);
     }

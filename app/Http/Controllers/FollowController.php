@@ -36,7 +36,7 @@ class FollowController extends Controller
         $isFollowing = $followsHelper->toggleFollow($profileUser, $follower);
 
         if (!$isFollowing){
-            // $followsHelper->addNotification($pdo, $profileUser, $follower);
+            $followsHelper->addNotification($profileUser, $follower);
         }
 
         return response()->json(['success' => true]);

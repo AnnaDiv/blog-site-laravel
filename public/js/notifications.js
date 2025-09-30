@@ -10,12 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Fetch notifications
-    fetch('src/APIs/notifications.api.php?action=list')
+    fetch('/notifications')
         .then(res => res.json())
         .then(data => {
             dropdown.innerHTML = ''; // Clear existing list
 
-            if (!Array.isArray(data) || data.length === 0) {
+            var content = data;
+
+            if (!Array.isArray(data) || data[0].length === 0 ) {
                 dropdown.innerHTML = '<li>No notifications</li>';
                 toggleBtn.classList.remove('has-unread');
                 return;
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let hasUnread = false;
 
-            data.forEach(item => {
+            data[0].forEach(item => {
                 const li = document.createElement('li');
                 const a = document.createElement('a');
                 li.className = 'notification';
@@ -45,10 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     e.preventDefault();
                     const targetUrl = item.link;
 
-                    fetch('src/APIs/notifications.api.php?action=mark_read', {
+                    fetch('/notifications', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ notification_id: item.notification_id })
+                        headers: { 
+                            "X-CSRF-TOKEN": csrfToken,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            notification_id: item.id
+                        })
                     })
                         .then(res => res.json())
                         .then(() => {

@@ -28,7 +28,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 
     <title>{{$title ?? 'Love it OR throw it'}}</title>
-    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
@@ -51,5 +51,4 @@
     </div>
 
 </body>
-
 </html>

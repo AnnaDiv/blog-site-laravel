@@ -12,6 +12,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\NotificationsController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -62,6 +63,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
 
     Route::get('/block', [BlockController::class, 'getBlock'])->name('block.get');
     Route::post('/block', [BlockController::class, 'toggleBlock'])->name('block.toggle');
+
+    Route::get('/notifications', [NotificationsController::class, 'showNotifications'])->name('notifications.get');
+    Route::post('/notifications', [NotificationsController::class, 'markRead'])->name('notifications.mark');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

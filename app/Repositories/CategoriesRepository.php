@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use PDO;
 use App\Models\Category;
 
 class CategoriesRepository

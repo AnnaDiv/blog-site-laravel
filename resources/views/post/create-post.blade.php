@@ -78,7 +78,6 @@
 </form>
 
 </x-layout>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <script>
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const userID = {{ auth()->user()->id }};

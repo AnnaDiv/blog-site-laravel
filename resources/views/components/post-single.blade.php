@@ -68,7 +68,6 @@
 
     </div>
 </div>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <script>
 const postId = {{ (int) $post->id }};
 const postOwner = @json($post->user_nickname);

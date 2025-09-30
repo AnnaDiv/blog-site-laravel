@@ -2,9 +2,8 @@
 
 namespace App\Support;
 
-use App\Support\BlocksHelper;
-
 use App\Models\User;
+use App\Models\Notification;
 
 class FollowsHelper
 {
@@ -30,30 +29,21 @@ class FollowsHelper
         return $isFollowing;
     }
 
-    function addNotification($pdo, string $profileUser, string $follower): bool {
+    function addNotification(User $profileUser, User $follower): bool {
 
-        $message = "{$follower} followed you";
+        $message = "{$follower->nickname} followed you";
 
-        $follower = User::where('nickname', $follower)->firstOrFail();
-        $link = "{{route('profile.profile', $follower)}}";
+        $link = "/profile/$follower->nickname";
 
-        /*
-        $stmt = $pdo->prepare('INSERT INTO notification_actions (`place`, `content`) VALUES (:place, :content)');
-        $stmt->execute([
-            ':place' => "follow($profileUser}",
-            ':content' => $message
+        Notification::create([
+            'notification_owner_id' => $profileUser->id,
+            'sender_id' => $follower->id,
+            'content' => $message,
+            'place' => "follow",
+            'link' => $link,
+            'used' => 0
         ]);
-        $actions_id = $pdo->lastInsertId();
 
-        $stmt = $pdo->prepare('INSERT INTO notifications (`users_nickname`, `senders_nickname`, `actions_id`, `link`) 
-                            VALUES (:users_nickname, :senders_nickname, :actions_id, :link)');
-        $stmt->execute([
-            ':users_nickname' => $profileUser,
-            ':senders_nickname' => $follower,
-            ':actions_id' => $actions_id,
-            ':link' => $link
-        ]);
-        */
         return true;
     }
 }

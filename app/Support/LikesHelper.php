@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Notification;
 
 class LikesHelper
 {
@@ -31,8 +33,11 @@ class LikesHelper
         return $likes;
     }
 
-    function toggleLike($post_id, $user_id, $post_owner, $user_nickname)
+    function toggleLike(int $post_id, User $user, User $post_owner)
     {
+        $user_id = $user->id;
+        $post_owner_id = $post_owner->id;
+
         $existingLike = Like::select('id', 'like')
             ->where('post_id', $post_id)
             ->where('user_id', $user_id)
@@ -50,8 +55,8 @@ class LikesHelper
             ]);
         }
 
-        if ($newLike === 1 && $user_nickname !== $post_owner) {
-            // addNotification($post_owner, $user_nickname, $post_id);
+        if ($newLike === 1 && $user_id !== $post_owner_id) {
+            $this->addNotification($post_owner, $user, $post_id);
         }
 
         return [
@@ -60,23 +65,21 @@ class LikesHelper
         ];
     }
 
-    function addNotification(string $post_owner, string $sender_nickname, int $post_id): bool {
-        if ($post_owner === $sender_nickname) return true;
+    function addNotification(User $post_owner, User $sender, int $post_id): bool {
 
-        $link = "{{route('post.view', $post_id)}}";
-        $message = "{$sender_nickname} liked your post";
-        /*
-        $notification_action = Notification_Action::create([
-            'place' => "like{$post_id}",
-            'content' => $message
-        ]);
+        if ($post_owner === $sender) return true;
+
+        $link = "/post/view/$post_id";
+        $message = "{$sender->nickname} liked your post";
 
         Notification::create([
-            'user_nickname' => $post_owner,
-            'sender_nickname' => $sender_nickname,
-            'actions_id' => $notification_action->id,
+            'notification_owner_id' => $post_owner->id,
+            'sender_id' => $sender->id,
+            'content' => $message,
+            'place' => "like",
             'link' => $link,
-        ]); */
+            'used' => 0
+        ]); 
 
         return true;
     }
