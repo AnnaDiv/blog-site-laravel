@@ -244,4 +244,23 @@ class EntriesRepository
         return $post;
     }
 
+    public function likedPosts(User $user) {
+
+        $excludedUsers = $this->excludedUsers($user->nickname);
+
+        $query = Post::query()->select('*')
+                ->whereHas('likes', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                })
+                ->with('categories');
+        
+        if (!empty($excludedUsers)) {
+            $query->whereNotIn('user_nickname', $excludedUsers);
+        }
+
+        $posts = $query->paginate(15);
+
+        return $posts;
+    }
+
 }

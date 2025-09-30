@@ -58,8 +58,13 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::put('/post/edit/{post}', [EntriesController::class, 'edit'])->name('post.edit');
     Route::delete('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
 
+    Route::get('/mylikes', [EntriesController::class, 'myLikedPosts'])->name('mylikes');
+
     Route::get('/follow', [FollowController::class, 'getFollows'])->name('follow.get');
     Route::post('/follow', [FollowController::class, 'toggleFollow'])->name('follow.toggle');
+
+    Route::get('/followers', [FollowController::class, 'showFollowers'])->name('followers');
+    Route::get('/following', [FollowController::class, 'showFollowing'])->name('following');
 
     Route::get('/block', [BlockController::class, 'getBlock'])->name('block.get');
     Route::post('/block', [BlockController::class, 'toggleBlock'])->name('block.toggle');

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Support\FollowsHelper;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class FollowController extends Controller
 {
@@ -40,6 +42,28 @@ class FollowController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function showFollowers(Request $request) : View | RedirectResponse {
+        $user = $request->user();
+
+        if(!$user){
+            return back()->with('error', 'cant find user');
+        }
+        $users = $user->followers()->paginate(15);
+        
+        return view('search.users')->with('users', $users);
+    }
+
+    public function showFollowing (Request $request) : View | RedirectResponse {
+        $user = $request->user();
+
+        if(!$user){
+            return back()->with('error', 'cant find user');
+        }
+        $users = $user->following()->paginate(15);
+
+        return view('search.users')->with('users', $users);
     }
 
 }

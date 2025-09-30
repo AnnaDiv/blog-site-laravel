@@ -7,7 +7,7 @@
             <x-user-card :user="$user"/>
         @empty
             <div class="bg-white">
-                Sorry, there are no users matching your search.
+                Sorry, there are no users to be displayed.
             </div>
         @endforelse
     </div>

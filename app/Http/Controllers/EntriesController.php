@@ -274,4 +274,16 @@ class EntriesController extends Controller
             return redirect()->route('home');
         }
     }
+
+    public function myLikedPosts(Request $request, EntriesRepository $entriesRepository) : View | RedirectResponse{
+        $user = $request->user();
+
+        if (!$user) {
+            return back()->with('error', 'error loading liked posts');
+        }
+
+        $posts = $entriesRepository->likedPosts($user);
+
+        return  view('search.only-posts')->with('posts', $posts);       
+    }
 }
