@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const dropdown = document.getElementById('dropdownList');
     const toggleBtn = document.getElementById('dropdownToggle');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     if (!dropdown || !toggleBtn) return;
 
