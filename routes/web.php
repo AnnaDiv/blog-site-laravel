@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
     Route::get('profile/private/{user_nickname}', [ProfileController::class, 'private'])->name('profile.private');
 
-    Route::get('/post/edit/{post}', [EntriesController::class, 'editPostView'])->name('post.editView');
+    Route::get('/post/edit/{post_id}', [EntriesController::class, 'editPostView'])->name('post.editView');
     Route::put('/post/edit/{post}', [EntriesController::class, 'edit'])->name('post.edit');
     Route::delete('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
 
@@ -71,6 +71,9 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
 
     Route::get('/notifications', [NotificationsController::class, 'showNotifications'])->name('notifications.get');
     Route::post('/notifications', [NotificationsController::class, 'markRead'])->name('notifications.mark');
+
+    Route::get('/profile/edit/{profile}', [UsersController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/edit/{user}', [UsersController::class, 'update'])->name('profile.update');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

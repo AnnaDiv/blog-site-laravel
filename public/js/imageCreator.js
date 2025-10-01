@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const imageInput = document.getElementById('image');
     if (!imageInput || !userID) return;
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

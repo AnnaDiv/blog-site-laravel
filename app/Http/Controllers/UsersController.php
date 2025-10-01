@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Repositories\UsersRepository;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 use App\Models\User;
+use App\models\Profile;
 
 class UsersController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(protected UsersRepository $usersRepository) {}
 
     public function search(Request $request): View
@@ -26,5 +31,47 @@ class UsersController extends Controller
         $users = $this->usersRepository->search($perPage, $quote, $excludedUsers);
 
         return view('search.users')->with('users', $users);
+    }
+
+    public function edit(Profile $profile, Request $request) : View | RedirectResponse{
+
+        $user = $request->user();
+
+        if(!$user){
+            return back()->with('error', 'there is no user to update');
+        }
+        
+        $this->authorize('update', $profile);
+
+        return view('profile.profile-update')->with('user', $user);
+    }
+
+    public function update(User $user, Request $request) : RedirectResponse {
+
+        if(!$user){
+            return redirect()->route('home')->with('error', 'user not identified');
+        }
+        
+        $validatedData = $request->validate([
+            'email' => 'required|string|email',
+            'nickname' => 'required|string|max:100',
+            'motto' => 'nullable|string',
+            'old_pass' => 'nullable|string|min:3',
+            'password' => 'nullable|string|min:3|confirmed'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+        } else {
+            $image = null;
+        }
+
+        $user = $this->usersRepository->update($user, $validatedData, $image);
+        
+        if (!$user instanceof \App\Models\User){
+            return back()->with('error' , $user);
+        }
+        
+        return redirect()->route('profile.public', $user->nickname);
     }
 }

@@ -24,9 +24,9 @@
                     $user = auth()->user();
                 @endphp
                 @if ($user->image_folder)
-                    <img src="{{asset('storage/' . $user->image_folder)}}" alt="Avatar" class="w-full rounded-lg mb-4 m-auto"/>
+                    <img id="profile-toggle" src="{{asset('storage/' . $user->image_folder)}}" alt="Avatar"/>
                 @else
-                    <img id="profile-toggle" src="{{asset('storage/user/alt/blank.jpeg')}}" alt="Profile Picture">
+                    <img id="profile-toggle" src="{{asset('storage/user/alt/blank.jpeg')}}" alt="Avatar">
                 @endif
                 <nav id="side-nav-profile">
                     <a href="{{route('post.createView')}}"><i class="fa fa-plus"></i> Create Post</a>
@@ -56,6 +56,7 @@
 
         <div id="side-nav"
             x-show="open"
+            x-cloak
             @click.away = "open = false"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="-translate-x-full"

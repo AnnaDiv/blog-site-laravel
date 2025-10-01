@@ -16,7 +16,7 @@
         @endif
     </div>
     @can('update', $profile)
-        <a class="user_Profile-update" href="#edit_profile">
+        <a class="user_Profile-update" href="{{ route('profile.edit', $profile) }}">
             <button>Update your profile</button>
         </a>
     @endcan

@@ -1,0 +1,95 @@
+.profile-form-container {
+  max-width: 90%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: sans-serif;
+}
+
+.profile-up {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Profile Image */
+.profile-image-up {
+  flex: 1;
+  text-align: center;
+}
+.profile-image {
+  max-width: 80%;
+  max-height: 50%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  margin-bottom: 1rem;
+}
+.form-input-file {
+  margin-top: .5rem;
+}
+
+/* Profile Info */
+.profile-info-up {
+  flex: 2;
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .5rem;
+  color: #333;
+}
+.form-input, .form-textarea, .form-input[type=text] {
+  width: 100%;
+  padding: .75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Password section */
+.password-section {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+.form-subtitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+  color: #444;
+}
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .5rem;
+  font-size: .9rem;
+}
+
+/* Submit Button */
+.form-actions {
+  text-align: right;
+  margin-top: 2rem;
+}
+.btn-submit {
+  background: #4f46e5;
+  color: #fff;
+  padding: .75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-submit:hover {
+  background: #4338ca;
+}

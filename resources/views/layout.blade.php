@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{asset('css/pagination.css')}}" />
     <link rel="stylesheet" href="{{asset('css/post.css')}}" />
     <link rel="stylesheet" href="{{asset('css/profile.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/profile_edit.css')}}" />
     <link rel="stylesheet" href="{{asset('css/dropdown.css')}}" />
     <link rel="stylesheet" href="{{asset('css/create_edit_post.css')}}" />
     <link rel="stylesheet" href="{{asset('css/simple-text.css')}}" />
