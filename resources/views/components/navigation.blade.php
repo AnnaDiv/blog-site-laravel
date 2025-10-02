@@ -6,6 +6,7 @@
     <a href="#my_art">My art <i class="fa fa-paint-brush"></i></a>
     <a href="{{route('categories')}}">Categories <i class="fa fa-list-ol"></i></a>
     <a href="{{route('contact_us')}}">Contact us <i class="fa fa-envelope-open"></i></a>
+    <a href="{{route('account.help')}}">Account Help <i class="fa fa-envelope-open"></i></a>
     <?php /*@if(Auth::id()=='1')
         <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'control']); ?>">Control Panel</a>
     @endif */ ?>

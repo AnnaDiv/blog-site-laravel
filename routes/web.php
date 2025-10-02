@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\AccountController;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -28,6 +29,13 @@ Route::post('/comment/add', [CommentController::class, 'addComment'])->name('com
 Route::post('/comment/remove', [CommentController::class, 'removeComment'])->name('comment.remove');
 
 Route::get('/profile/{user_nickname}', [ProfileController::class, 'public'])->name('profile.public');
+
+Route::get('/account/help', [AccountController::class, 'index'])->name('account.help');
+
+Route::get('/password/help', [AccountController::class, 'passwordHelp'])->name('password.help');
+Route::post('/password/reset', [AccountController::class, 'passwordResetProduce'])->name('password.token');
+Route::get('/password/reset/{token}', [AccountController::class, 'passwordReset'])->name('password.reset');
+Route::post('/password/reset/submit', [AccountController::class, 'passwordResetSubmit'])->name('password.reset.submit');
 
 //etc views
 Route::get('contact_us', function () {

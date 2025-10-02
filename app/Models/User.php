@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordSubmission;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
+
 use App\Models\Like;
 
 class User extends Authenticatable
@@ -129,5 +133,10 @@ class User extends Authenticatable
 
     public function notifications() : HasMany {
         return $this->hasMany(Notification::class, 'notification_owner_id', 'id');
+    }
+
+    public function sendPasswordReset($token)
+    {
+        Mail::to($this->email)->send(new ResetPasswordSubmission($token, $this));
     }
 }

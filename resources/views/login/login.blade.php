@@ -24,7 +24,7 @@
         </a>
     </p>
     <p>Need help?
-        <a href="#for_account_help">
+        <a href="{{ route('account.help') }}">
             <button class="secondary-btn">Account Help</button>
         </a>
     </p>
