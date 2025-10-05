@@ -6,6 +6,8 @@
 
         <input type="hidden" name="token" value="{{ $token }}"/>
 
+        <input type="hidden" name="email" value="{{ $email }}"/>
+
         <div>Change Password:
             <label for="password">New Password</label>
             <input type="password" name="password" id="password"/>

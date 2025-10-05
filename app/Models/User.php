@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Mail\ProfileActivator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -135,7 +137,17 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class, 'notification_owner_id', 'id');
     }
 
-    public function sendPasswordReset($token)
+    /*public function sendPasswordReset($token)
+    {
+        Mail::to($this->email)->send(new ResetPasswordSubmission($token, $this));
+    }*/
+
+    public function sendActivateAccount($token)
+    {
+        Mail::to($this->email)->send(new ProfileActivator($token));
+    }
+
+    public function sendPasswordResetNotification($token)
     {
         Mail::to($this->email)->send(new ResetPasswordSubmission($token, $this));
     }

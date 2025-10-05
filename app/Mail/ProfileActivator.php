@@ -9,26 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-use App\models\User;
-
-class ResetPasswordSubmission extends Mailable
+class ProfileActivator extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $passwordResetUrl;
-    public $user;
-
+    public $activateProfileUrl;
     /**
      * Create a new message instance.
      */
-    public function __construct(string $token, User $user)
+    public function __construct(string $token)
     {
-        $this->user = $user;
-        $this->passwordResetUrl = url(route('password.reset', [
-            'token' => urlencode($token),
-            'email' => $user->email
+        $this->activateProfileUrl = url(route('account.activate', [
+            'token' => urlencode($token)
         ], false));
-
     }
 
     /**
@@ -37,7 +30,7 @@ class ResetPasswordSubmission extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Submission',
+            subject: 'Activate your profile',
         );
     }
 
@@ -47,11 +40,10 @@ class ResetPasswordSubmission extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.password-reset',
+            view: 'emails.activate-profile',
             with: [
-                'url' => $this->passwordResetUrl,
-                'user' => $this->user
-            ]
+                'url' => $this->activateProfileUrl
+            ] 
         );
     }
 

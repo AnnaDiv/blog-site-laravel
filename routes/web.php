@@ -52,6 +52,8 @@ Route::middleware('guest')->group(function () { // only someone who isnt logged 
 
     Route::get('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/login', [LoginController::class, 'loginAuth'])->name('login.auth');
+
+    Route::get('/account/activate/{token}', [AccountController::class, 'activateAccount'])->name('account.activate');
 });
 
 Route::middleware('auth')->group(function () { // only someone who is logged in can visit this

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\Mail\ResetPasswordSubmission;
-use App\models\User;
+use App\Models\User;
 
 class AccountController extends Controller
 {
@@ -25,33 +25,23 @@ class AccountController extends Controller
         return view('account.password-help');        
     }
 
-    public function passwordResetProduce(Request $request, PasswordBroker $broker) {
+    public function passwordResetProduce(Request $request) {
 
-        $email = $request->input('email');
-
-        $validator = Validator::make(['email' => $email], [
-            'email' => 'required|email|exists:users,email'
-        ]);
-
-        if ($validator->fails()) {
-            return view('account.password-change-submitted');
-        }
-
-        $user = User::where('email', $email)->firstOrFail();
-
-        $token = $broker->createToken($user);
-
-        $user->sendPasswordReset($token);
-
+        $request->validate(['email' => 'required|email|exists:users,email']);
+        
+        Password::sendResetLink($request->only('email'));
+        
         return view('account.password-change-submitted');
     }
 
-    public function passwordReset(string $token) : View {
+    public function passwordReset(string $token, Request $request) : View {
 
         $token = urldecode($token);
+        $email = urldecode($request->query('email', null));
 
         return view('account.password-reset-form', [
             'token' => $token,
+            'email' => $email,
         ]);
     }
 
@@ -60,32 +50,52 @@ class AccountController extends Controller
         $request->validate([
             'token' => 'required|string',
             'password' => 'required|string|min:3|confirmed',
+            'email' => 'required|email',
         ]);
-
-        $token_found = DB::table('password_reset_tokens')
-                ->where('token', $request->input('token'))
-                ->first();
+        
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+            }
+        );
           
-        if (!$token_found) {
-            return back()->withErrors(['token' => 'Invalid or expired reset token']);
+        if ($status === Password::PASSWORD_RESET) {
+            if ($request->user()) {
+                return redirect()->route('logout')->with('success', __($status));
+            }
+            return redirect()->route('login')->with('success', __($status));
+        }
+        else {
+            return back()->with(['error' => 'Invalid or expired reset token']);
         }
 
-        $email = $token_found->email;
+    }
+
+    public function activateAccount(string $token) {
+
+        $token = urldecode($token);
+        $email = null;
+
+        foreach (DB::table('account_activation_tokens')->get() as $entry) {
+            if (Hash::check($token, $entry->token)) {
+                $email = $entry->email;
+                break;
+            }
+        }
+
+        if ($email == null){
+            return redirect()->route('register')->with('error', 'activation token invalid or expired');
+        }
 
         $user = User::where('email', $email)->firstOrFail();
 
-        $user->forceFill([
-            'password' => Hash::make($request->input('password')),
-        ])->save();
+        $user->update(['status' => 'active']);
 
-        DB::table('password_reset_tokens')->where('email', $email)->delete();
+        DB::table('account_activation_tokens')->where('email', $email)->delete();
 
-        $user = $request->user();
-
-        if ($user) {
-            return redirect()->route('logout');
-        }
-
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Successful account activation, you are now able to log in.');
     }
 }
