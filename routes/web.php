@@ -14,6 +14,9 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Controller;
+use App\View\Components\Categories;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
@@ -36,6 +39,8 @@ Route::get('/password/help', [AccountController::class, 'passwordHelp'])->name('
 Route::post('/password/reset', [AccountController::class, 'passwordResetProduce'])->name('password.token');
 Route::get('/password/reset/{token}', [AccountController::class, 'passwordReset'])->name('password.reset');
 Route::post('/password/reset/submit', [AccountController::class, 'passwordResetSubmit'])->name('password.reset.submit');
+
+Route::get('/404', [AdminController::class, 'page404'])->name('page404');
 
 //etc views
 Route::get('contact_us', function () {
@@ -61,12 +66,11 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::post('/post/create', [EntriesController::class, 'create'])->name('post.create');
     Route::post('/image/preview', [ImageController::class, 'preview'])->name('image.preview');
 
-    Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
     Route::get('profile/private/{user_nickname}', [ProfileController::class, 'private'])->name('profile.private');
 
     Route::get('/post/edit/{post_id}', [EntriesController::class, 'editPostView'])->name('post.editView');
     Route::put('/post/edit/{post}', [EntriesController::class, 'edit'])->name('post.edit');
-    Route::delete('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
+    Route::put('post/delete/{post}', [EntriesController::class, 'remove'])->name('post.remove');
 
     Route::get('/mylikes', [EntriesController::class, 'myLikedPosts'])->name('mylikes');
 
@@ -86,4 +90,29 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
     Route::put('/profile/edit/{user}', [UsersController::class, 'update'])->name('profile.update');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () { // only admin can access these routes
+    Route::get('/admin/panel', [AdminController::class, 'panel'])->name('admin.panel');
+
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/search', [AdminController::class, 'userSearch'])->name('admin.user.search');
+
+    Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
+    Route::delete('user/delete/{user_nickname}', [ProfileController::class, 'permDelete'])->name('admin.user.permDelete');
+    Route::put('user/ban/{user_nickname}', [UsersController::class, 'ban'])->name('admin.user.ban');
+    Route::put('user/activate/{user_nickname}', [UsersController::class, 'adminActivate'])->name('admin.user.activate');
+    Route::put('/profile/edit/admin/{user_nickname}', [UsersController::class, 'editAdmin'])->name('profile.edit.admin');
+
+    Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
+    //Route::get('/admin/deleted/posts', [AdminController::class, 'deletedPosts'])->name('admin.deleted.posts');
+
+    Route::put('post/reinstate/{post}', [EntriesController::class, 'reinstatePost'])->name('post.reinstate');
+    Route::delete('post/permadelete/{post}', [EntriesController::class, 'adminDelete'])->name('post.permaDelete');
+
+    Route::get('/category/view/{category}', [CategoriesController::class, 'view'])->name('category.view');
+    Route::put('/category/update/{category}', [CategoriesController::class, 'update'])->name('category.update');
+    Route::delete('/category/delete/{category}', [CategoriesController::class, 'delete'])->name('category.delete');
+
+    Route::get('/admin/categories/search', [CategoriesController::class, 'adminSearch'])->name('categories.search.admin');
 });

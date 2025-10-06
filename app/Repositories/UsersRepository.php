@@ -36,6 +36,18 @@ class UsersRepository
         return $users;
     }
 
+    public function usersByQuote(int $perPage, string $quote) { //admin usage for users by quote
+
+        $like = '%' . $quote . '%';
+        $query = User::query('*')
+            ->withCount(['likes', 'comments', 'posts'])
+            ->where(function ($q) use ($like) {
+                $q->where('nickname', 'like', $like)
+                    ->orWhere('motto', 'like', $like);
+            });
+        return $query->paginate($perPage);
+    }
+
     public function excludedUsers(string $nickname): array
     {
         $user = User::where('nickname', $nickname)->first();
@@ -70,7 +82,10 @@ class UsersRepository
         }
 
         if ($validatedData['password'] != ''){
-            if ($validatedData['old_pass'] != ''){
+            if (auth()->user()->admin){
+                $new_password = Hash::make($validatedData['password']);
+            }
+            elseif ($validatedData['old_pass'] != ''){
 
                 if(Hash::check($validatedData['old_pass'], $user->password)){
                     $new_password = Hash::make($validatedData['password']);

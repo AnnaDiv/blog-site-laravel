@@ -7,29 +7,46 @@
         <div class="post-image-single">
 
             <img src="{{asset('storage/' . $post->image_folder)}}" alt="Post image" />
+            <br>
             <div class="post-actions-single">
-                @can('update', $post)
-                    <div>
+                <div>
+                    @if(!auth()->user()->admin)
+                        @can('update', $post)
+                            <div class="action-buttons-single">
+                                <a href="{{ route('post.editView', $post->id) }}"><button>Edit</button></a>
+                                <form method="POST" action="{{ route('post.remove', $post) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
+                        @endcan
+                    @endif
+                    @admin
                         <div class="action-buttons-single">
-                            <a href="{{ route('post.editView', $post->id) }}"><button>Edit</button></a>
-                            <form method="POST" action="{{ route('post.remove', $post) }}">
+                            <!-- <a href="#admin_edit"><button>Edit</button></a> -->
+                            @if($post->deleted == 0)
+                                <form method="POST" action="{{ route('post.remove', $post) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button>Delete(put it in delete bin)</button>
+                                </form>
+                            @endif
+                            @if($post->deleted == 1)
+                                <form method="POST" action="{{ route('post.reinstate', $post) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button>Reinstate</button>
+                                </form>
+                            @endif
+                            <form method="POST" action="{{ route('post.permaDelete', $post) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Delete</button>
+                                <button>Delete(perma delete)</button>
                             </form>
-                        </div>
-                    <?php /* if($isadmin === true) : ?>
-                    <div class="action-buttons-single">
-                        <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'edit/post', 'post_id' => $post['posts_id']]); ?>"><button>Edit</button></a>
-                        <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'delete/post', 'post_id' => $post['posts_id']]); ?>"><button>Delete(put it in delete bin)</button></a>
-                        <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'perma_delete/post', 'post_id' => $post['posts_id']]); ?>"><button>Delete(perma delete)</button></a>
-                        <?php if($post['deleted'] == 1): ?>
-                            <a href="index.php?<?php echo http_build_query(['route' => 'admin' , 'pages' => 'reinstate/post', 'post_id' => $post['posts_id']]); ?>"><button>Reinstate</button></a>
-                        <?php endif; ?>
+                    @endadmin
                     </div>
-                    <?php endif; */ ?>
-                    </div>
-                @endcan
+                </div>
                 <div class="like-wrapper">
                     <span id="like-count">0</span>
                     <button id="like-toggle">
@@ -45,7 +62,7 @@
             <h2 class="post-title-single">{{$post->title}}</h2>
             <p class="post-description-single">{{$post->content}}</p>
             <p class="post-description-single">
-                Post Owner: <a href="#owner_profile">{{$post->user_nickname}}</a>
+                Post Owner: <a href="{{route('profile.public', $post->user_nickname)}}">{{$post->user_nickname}}</a>
             </p>
         
             <div class="post-categories-single">
@@ -57,11 +74,11 @@
                                 {{ $category->title }}
                             </a>
                         @endif
-                         @if(!$loop->last), @endif
+                        @if(!$loop->last), @endif
                     @endforeach
                 </div>
             </div>
-         
+
             <x-post-comment-section />
 
         </div>

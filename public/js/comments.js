@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           div.innerHTML = `
             <div class="comment-body">
-              <a href="#${comment.user_id}_profile">
+              <a href="/profile/${comment.user_nickname}">
                 <strong>${comment.user_nickname}</strong>
               </a>: ${comment.content}
               <br><small>${new Date(comment.time).toLocaleString()}</small>

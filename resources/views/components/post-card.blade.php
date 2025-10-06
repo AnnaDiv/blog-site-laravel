@@ -1,6 +1,11 @@
 @props(['post'])
 
-<div class="masonry-item">
+<div class="masonry-item 
+    @if (request()->is('profile/all/' . $post->user_nickname) && $post->deleted == 1) 
+        back-col
+    @elseif (request()->is('profile/all/' . $post->user_nickname) && $post->status == 'private')
+        back-col-pr
+    @endif">
     <a href="{{route('post.view', $post->id)}}">
         <img class="item_image" src="{{asset('storage/' . $post->image_folder)}}" alt="Post image">
     </a>

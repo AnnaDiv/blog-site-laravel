@@ -48,10 +48,21 @@
     <div class="profile-status-switch">    
         @can('update', $profile)
             <div class="dropdown-div">
-                <div>Current Profile view: @if (request()->is('profile/' . $profile_owner->nickname)) Public @else Private @endif</div>
+                <div>Current Profile view: 
+                    @if (request()->is('profile/private/' . $profile_owner->nickname)) Private
+                    @elseif (request()->is('profile/deleted/' . $profile_owner->nickname)) Deleted
+                    @elseif (request()->is('profile/all/' . $profile_owner->nickname)) All
+                    @else
+                        Public
+                    @endif
+                </div>
                 <div class="dropdown">
                     <button onclick="dropdown_function()" class="dropbtn">Switch</button>
                     <div id="postDropdown" class="dropdown-content">
+                        @admin
+                            <a href="{{route('profile.all', $profile_owner->nickname)}}">All Posts</a>
+                            <a href="{{route('profile.deleted', $profile_owner->nickname)}}">Deleted Posts</a>
+                        @endadmin
                         <a href="{{route('profile.public', $profile_owner->nickname)}}">Public Posts</a>
                         <a href="{{route('profile.private', $profile_owner->nickname)}}">Private Posts</a>
                     </div>

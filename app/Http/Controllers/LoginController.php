@@ -28,7 +28,14 @@ class LoginController extends Controller
         ])) {
 
             $request->session()->regenerate();
-            return redirect()->intended(route('home'))->with('success', 'Successful login');
+
+            $user = $request->user();
+            if ($user->admin) {
+                return redirect()->route('admin.panel');
+            }
+            else {
+                return redirect()->intended(route('home'))->with('success', 'Successful login');
+            }
         }
 
         return back()->withErrors([

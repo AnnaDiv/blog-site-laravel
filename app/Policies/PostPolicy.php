@@ -37,14 +37,14 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $user->nickname == $post->user_nickname;
+        return $user->nickname == $post->user_nickname || $user->admin;
     }
     /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Post $post): bool
     {
-        return $user->nickname == $post->user_nickname;
+        return $user->admin;
     }
 
     /**

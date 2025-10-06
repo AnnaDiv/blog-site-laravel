@@ -142,8 +142,22 @@ class EntriesRepository
 
         $user = User::findOrFail($user_id);
 
-        $posts = $this->postQuery($user)
-            ->get();
+        $posts = Post::select('*')
+            ->with('categories')
+            ->where('user_nickname', $user->nickname)
+            ->paginate(15);
+        
+        return $posts;
+    }
+
+    public function deletedPostsPerUser($user_id) {
+        $user = User::findOrFail($user_id);
+
+        $posts = Post::select('*')
+            ->with('categories')
+            ->where('user_nickname', $user->nickname)
+            ->where('deleted', 1)
+            ->paginate(15);
         
         return $posts;
     }

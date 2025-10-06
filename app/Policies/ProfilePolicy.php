@@ -37,7 +37,7 @@ class ProfilePolicy
      */
     public function update(User $user, Profile $profile): bool
     {
-        return $user->id == $profile->user_id;
+        return ($user->id == $profile->user_id || $user->admin == 1);
     }
 
     /**
@@ -45,7 +45,7 @@ class ProfilePolicy
      */
     public function delete(User $user, Profile $profile): bool
     {
-        return false;
+        return  $user->admin == 1;
     }
 
     /**

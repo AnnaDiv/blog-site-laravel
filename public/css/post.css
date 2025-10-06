@@ -8,6 +8,14 @@
   padding: 1rem;
 }
 
+.back-col{
+  background-color: rgb(255, 151, 124);
+}
+
+.back-col-pr {
+  background-color: rgb(175, 255, 129);
+}
+
 .post-layout-flex-single {
   display: flex;
   flex-wrap: wrap;

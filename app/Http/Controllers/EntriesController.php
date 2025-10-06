@@ -72,11 +72,20 @@ class EntriesController extends Controller
             $owner = User::where('nickname', $post->user_nickname)->first();
 
             //if user is blocked by owner
-            if ($owner->hasBlocked($user)) {
-                return redirect()->route('home'); //not gonna show him this
+            if ($user->admin) {
+                return view('post.view-post')->with('post', $post);
+            }
+            elseif (($user == $owner) && ($post->deleted == 0)){
+                return view('post.view-post')->with('post', $post);
+            }
+            elseif ($post->status == 'public' && !$owner->hasBlocked($user) && ($post->deleted == 0)) {
+                return view('post.view-post')->with('post', $post);
+            }
+            else {
+                return redirect()->route('page404'); //not gonna show him this
             }
         }
-        return view('post.view-post')->with('post', $post);
+        
     }
 
     public function create(Request $request, ImageCreator $creator): RedirectResponse
@@ -261,18 +270,35 @@ class EntriesController extends Controller
         return back()->with('error', $errors);
     }
 
-    public function remove(Post $post) : RedirectResponse { // will switch later to accomodate admin functions of permadelete
+    public function remove(Post $post) : RedirectResponse { //pseudo delete
         
-        $this->authorize('delete', $post);
+        $this->authorize('update', $post);
 
         if(!$post){
             return back()->with('error', "couldnt delete post");
         }
         else{
-            Storage::disk('public')->delete($post->image_folder);
-            $post->delete();
+            $post->update(['deleted' => 1]);
             return redirect()->route('home');
         }
+    }
+
+    public function adminDelete(Post $post) : RedirectResponse {
+
+        $this->authorize('delete', $post);
+
+        Storage::disk('public')->delete($post->image_folder);
+        $post->delete();
+
+        return redirect()->route('home');
+    }
+
+    public function reinstatePost(Post $post) : View {
+        $this->authorize('delete', $post);
+
+        $post->update(['deleted' => 0]);
+
+        return view('post.view-post')->with('post', $post);
     }
 
     public function myLikedPosts(Request $request, EntriesRepository $entriesRepository) : View | RedirectResponse{
