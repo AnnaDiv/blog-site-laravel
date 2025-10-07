@@ -115,9 +115,7 @@ class EntriesRepository
             $category = ucfirst(trim($category));
             $category = Category::firstOrCreate(['title' => $category]);
 
-            $categories_ids[] = $category->id;
-
-            $post->categories()->attach($categories_ids);
+            $post->categories()->attach($category->id);
         }
 
         return $post;
