@@ -290,10 +290,17 @@ class EntriesRepository
     }
 
     public function deletedPosts() {
-        $posts = Post::query('*')
+        $posts = Post::with('categories')
                 ->where('deleted', 1)
-                ->with('categories')
                 ->paginate(15);
+        return $posts;
+    }
+
+    public function myart() {
+        $posts = Post::with('categories')
+                ->where('deleted', 0)
+                ->where('type', 'art')
+                ->get();
         return $posts;
     }
 

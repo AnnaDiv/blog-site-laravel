@@ -20,6 +20,8 @@ use App\View\Components\Categories;
 
 Route::get('/', [EntriesController::class, 'browse'])->name('home');
 
+Route::get('/myart', [EntriesController::class, 'myart'])->name('myart');
+
 Route::get('/search/users', [UsersController::class, 'search'])->name('search.users');
 Route::get('/search/posts', [EntriesController::class, 'search'])->name('search.posts');
 Route::get('/post/view/{post}', [EntriesController::class, 'view'])->name('post.view');

@@ -6,7 +6,7 @@
     @auth
         <a href="#myhome">My Homepage <i class="fa fa-home"></i></a>
     @endauth
-    <a href="#my_art">My art <i class="fa fa-paint-brush"></i></a>
+    <a href="{{ route('myart') }}">My art <i class="fa fa-paint-brush"></i></a>
     <a href="{{route('categories')}}">Categories <i class="fa fa-list-ol"></i></a>
     <a href="{{route('contact_us')}}">Contact us <i class="fa fa-envelope-open"></i></a>
     <a href="{{route('account.help')}}">Account Help <i class="fa fa-envelope-open"></i></a>

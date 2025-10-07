@@ -32,9 +32,9 @@ class EntriesController extends Controller
 
         $posts = $this->entriesRepository->browse($perPage, $excludedUsers);
 
-        //$art_images = $this->entriesRepository->artBanner();
+        $art_images = $this->entriesRepository->myart();
 
-        return view('home.index', ['posts' => $posts]);
+        return view('home.index', compact('posts', 'art_images'));
     }
 
     public function search(Request $request)
@@ -311,5 +311,11 @@ class EntriesController extends Controller
         $posts = $entriesRepository->likedPosts($user);
 
         return  view('search.only-posts')->with('posts', $posts);       
+    }
+
+    public function myart(EntriesRepository $entriesRepository) : View {
+        $posts = $entriesRepository->myart();
+
+        return view('search.only-posts')->with('posts', $posts);
     }
 }

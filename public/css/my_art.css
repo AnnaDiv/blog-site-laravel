@@ -1,76 +1,35 @@
 /*masonry layout */
 #myart-title {
     text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     font-size: 2rem; /* Similar to h2 */
     font-weight: bold;
     color: #ffffff;
-    margin-top: 2rem;
     text-shadow:
         0 0 5px #fff4e1,
-        0 0 10px #ffe0ba,
-        0 0 15px #ffc880,
-        0 0 20px #ffba52;
+        0 0 10px #ffd6a0,
+        0 0 15px #ffb24d,
+        0 0 20px #ffa41c;
 
     animation: glowPulse 2.5s ease-in-out infinite;
     --outline-size: 1px;
 }
 
-.textDiv {
-  margin-top: 2rem;
-  margin-left: 43.5%;
-  font-weight: bold;
-  font-size: 2rem;
-}
-.textDiv.toplayer {
-  position: relative;
-  background: -webkit-linear-gradient(rgb(0, 255, 149), rgb(0, 217, 255));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.textDiv.layer {
-  position: absolute;
-  color: black; /*outline color*/
-  --outline-size: 1px;
-}
-.textDiv.top-left {
-  transform: translate(calc(var(--outline-size) * -1), calc(var(--outline-size) * -1))
-}
-.textDiv.top-mid {
-  transform: translate(0, calc(var(--outline-size) * -1))
-}
-.textDiv.top-right {
-  transform: translate(var(--outline-size), calc(var(--outline-size) * -1))
-}
-.textDiv.left {
-  transform: translate(calc(var(--outline-size) * -1), 0)
-}
-.textDiv.right {
-  transform: translate(var(--outline-size), 0)
-}
-.textDiv.bottom-left {
-  transform: translate(calc(var(--outline-size) * -1), var(--outline-size))
-}
-.textDiv.bottom-mid {
-  transform: translate(0, var(--outline-size))
-}
-.textDiv.bottom-right {
-  transform: translate(var(--outline-size), var(--outline-size))
-}
-
 @keyframes glowPulse {
     0%, 100% {
         text-shadow:
-            0 0 5px #fff4e1,
-            0 0 10px #ffe8cc,
-            0 0 15px #ffd6a0,
-            0 0 20px #ffcc80;
+            0 0 5px #ffd894,
+            0 0 10px #ffb65e,
+            0 0 15px #ffa127,
+            0 0 20px #ff9900da;
     }
     50% {
         text-shadow:
             0 0 2px #fff0dc,
-            0 0 6px #ffe0b3,
-            0 0 10px #ffc48d,
-            0 0 14px #ffb366;
+            0 0 6px #ffd79b,
+            0 0 10px #ffbb7b,
+            0 0 14px #ffaa54;
     }
 }
 

@@ -43,7 +43,7 @@
                         </select>
                     </div>
 
-                    <?php /*if($isadmin === true) : ?>
+                    @admin
                         <div class="post-type">
                             <label for="post_type">Post type:</label>
                             <select id="post_type" name="post_type">
@@ -51,9 +51,12 @@
                                 <option value="art">Art</option>
                             </select>
                         </div>
-                    <?php else : */?>
-                    <input type="hidden" name="post_type" value="post" />
-
+                    @endadmin
+                    @auth
+                        @if(!auth()->user()->admin)
+                            <input type="hidden" name="post_type" value="post" />
+                        @endif
+                    @endauth
                     <div class="post-categories-create">
                         <label for="categories">Categories</label>
                         <ul id="cats"></ul>
