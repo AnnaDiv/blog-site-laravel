@@ -7,6 +7,7 @@ use Illuminate\View\View;
 
 use App\Models\User;
 use App\Repositories\CategoriesRepository;
+use App\Repositories\EntriesRepository;
 use App\Repositories\UsersRepository;
 
 class AdminController extends Controller
@@ -38,5 +39,21 @@ class AdminController extends Controller
         $categories = $categoriesRepository->browse(30);
 
         return view('admin.admin-categories')->with('categories', $categories);
+    }
+
+    public function deletedPosts(EntriesRepository $entriesRepository) : View {
+        $posts = $entriesRepository->deletedPosts();
+        
+        return view('admin.admin-deleted-posts')->with('posts', $posts);
+    }
+
+    public function searchDeletedPosts(EntriesRepository $entriesRepository, Request $request) : View {
+        
+        $perPage = 15;
+        $quote = strtolower($request->input('search_q'));
+
+        $posts = $entriesRepository->deletedPostsbyQuote($perPage, $quote);
+
+        return view('admin.admin-deleted-posts')->with('posts', $posts);
     }
 }

@@ -153,11 +153,25 @@ class EntriesRepository
     public function deletedPostsPerUser($user_id) {
         $user = User::findOrFail($user_id);
 
-        $posts = Post::select('*')
-            ->with('categories')
+        $posts = Post::with('categories')
             ->where('user_nickname', $user->nickname)
             ->where('deleted', 1)
             ->paginate(15);
+        
+        return $posts;
+    }
+
+    public function deletedPostsbyQuote($perPage, $quote) {
+
+        $like = '%' . $quote . '%';
+
+        $posts = Post::with('categories')
+            ->where('deleted', 1)
+            ->where(function ($query) use ($like) {
+            $query->where('title', 'like', $like)
+                ->orWhere('content', 'like', $like)
+                ->orWhere('user_nickname', 'like', $like);
+    })->paginate($perPage);
         
         return $posts;
     }
@@ -274,6 +288,14 @@ class EntriesRepository
 
         $posts = $query->paginate(15);
 
+        return $posts;
+    }
+
+    public function deletedPosts() {
+        $posts = Post::query('*')
+                ->where('deleted', 1)
+                ->with('categories')
+                ->paginate(15);
         return $posts;
     }
 

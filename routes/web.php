@@ -99,13 +99,15 @@ Route::middleware(['auth', 'admin'])->group(function () { // only admin can acce
     Route::get('/admin/users/search', [AdminController::class, 'userSearch'])->name('admin.user.search');
 
     Route::get('profile/all/{user_nickname}', [ProfileController::class, 'all'])->name('profile.all');
+    Route::get('profile/deleted/{user_nickname}', [ProfileController::class, 'deleted'])->name('profile.deleted');
     Route::delete('user/delete/{user_nickname}', [ProfileController::class, 'permDelete'])->name('admin.user.permDelete');
     Route::put('user/ban/{user_nickname}', [UsersController::class, 'ban'])->name('admin.user.ban');
     Route::put('user/activate/{user_nickname}', [UsersController::class, 'adminActivate'])->name('admin.user.activate');
     Route::put('/profile/edit/admin/{user_nickname}', [UsersController::class, 'editAdmin'])->name('profile.edit.admin');
 
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
-    //Route::get('/admin/deleted/posts', [AdminController::class, 'deletedPosts'])->name('admin.deleted.posts');
+    Route::get('/admin/deleted/posts', [AdminController::class, 'deletedPosts'])->name('admin.deleted.posts');
+    Route::get('/admin/deleted/posts/search', [AdminController::class, 'searchDeletedPosts'])->name('admin.deletedPost.search');
 
     Route::put('post/reinstate/{post}', [EntriesController::class, 'reinstatePost'])->name('post.reinstate');
     Route::delete('post/permadelete/{post}', [EntriesController::class, 'adminDelete'])->name('post.permaDelete');

@@ -47,13 +47,36 @@
 
 <!-- Mobile layout -->
 <div class="category-grid-mobile">
-    @foreach ($categories as $category)
-        <div class="category-cell">
-            <a href="{{ route('category', $category->id) }}">
-                {{ $category->title }}
-            </a>
-        </div>
-    @endforeach
+<table class="item-container">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div class="category-admin">
+                @foreach ($categories as $category)
+                    <div class="category-cell">
+                        @if ($category)
+                        <tr class="category-item">
+                            <td> {{ $category->id }} </td>
+                            <td> {{ $category->title }} </td>
+                            <td> @if($category->description != ' ') {{ $category->description }} @else Auto Created @endif </td>
+                            <td>
+                                <a href="{{ route('category', $category->id) }}"><button>View</button></a>
+                                <a href="{{ route('category.view', $category) }}"><button>Edit</button></a>
+                                <a href="{{ route('category.delete', $category) }}"><button>Perma Delete</button></a>
+                            </td>
+                        </tr>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </tbody>
+    </table>
 </div>
 
 {{ $categories->links() }}
