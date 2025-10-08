@@ -1,5 +1,5 @@
 <header>
-    <h1 class="site-title"> Love it OR Throw it </h1>
+    <h1 class="site-title"><a href="{{ route('home') }}"> Love it OR Throw it </a></h1>
     <div class="user">
             @auth
                 <div class="dropdown-container">

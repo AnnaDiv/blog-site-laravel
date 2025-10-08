@@ -2,7 +2,8 @@
     @admin
         <a href="{{ route('admin.panel') }}">Control Panel <i class="fa fa-cog"></i></a>
     @endadmin
-    <a href="{{route('home')}}">Browse <i class="fa fa-list-alt"></i></a>
+    <a href="{{route('home')}}">Home <i class="fa fa-house"></i></a>
+    <a href="{{route('browse')}}">Browse <i class="fa fa-list-alt"></i></a>
     @auth
         <a href="#myhome">My Homepage <i class="fa fa-home"></i></a>
     @endauth

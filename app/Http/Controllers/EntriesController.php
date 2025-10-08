@@ -20,6 +20,12 @@ class EntriesController extends Controller
 
     public function __construct(protected EntriesRepository $entriesRepository) {}
 
+    public function home() : View {
+
+        $art_images = $this->entriesRepository->myart();
+
+        return view('home.home')->with('art_images', $art_images);
+    }
     public function browse(Request $request): View
     {
         $perPage = 15;
@@ -53,12 +59,12 @@ class EntriesController extends Controller
         return view('home.index')->with('posts', $posts);
     }
 
-    public function createPostView(Request $request): View
+    public function createPostView(): View
     {
         $categories = Category::query()
             ->pluck('title')
             ->toArray();
-        //dd($categories);
+        
         return view('post.create-post')->with('categories', $categories);
     }
 
@@ -279,7 +285,7 @@ class EntriesController extends Controller
         }
         else{
             $post->update(['deleted' => 1]);
-            return redirect()->route('home');
+            return redirect()->route('browse');
         }
     }
 
@@ -290,7 +296,7 @@ class EntriesController extends Controller
         Storage::disk('public')->delete($post->image_folder);
         $post->delete();
 
-        return redirect()->route('home');
+        return redirect()->route('browse');
     }
 
     public function reinstatePost(Post $post) : View {

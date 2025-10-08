@@ -15,10 +15,9 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Controller;
-use App\View\Components\Categories;
 
-Route::get('/', [EntriesController::class, 'browse'])->name('home');
+Route::get('/', [EntriesController::class, 'home'])->name('home');
+Route::get('/browse', [EntriesController::class, 'browse'])->name('browse');
 
 Route::get('/myart', [EntriesController::class, 'myart'])->name('myart');
 
