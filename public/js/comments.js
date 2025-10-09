@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {  
-  
+
   function fetchComments() {
     fetch(`/comment/${postId}`)
       .then(res => res.json())
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           `;
 
-          if (comment.user_id == userId) {
+          if (comment.user_id == userId || isAdmin) {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-comment';
             deleteBtn.dataset.id = comment.id;

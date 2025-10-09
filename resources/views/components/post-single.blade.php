@@ -89,6 +89,7 @@
 const postId = {{ (int) $post->id }};
 const postOwner = @json($post->user_nickname);
 const userId = @json(auth()->user()->id ?? null);
+const isAdmin = @json(auth()->user()->admin ?? null);
 const list = document.getElementById('comments-list');
 const form = document.getElementById('comment-form');
 const input = document.getElementById('comment-input');
