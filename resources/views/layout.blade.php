@@ -35,7 +35,8 @@
 <body>
     <x-header />
     @if(request()->is('browse') || request()->is('search/posts') || 
-        request()->is('search/users') || request()->is('category/*'))
+        request()->is('search/users') || request()->is('category/*')
+        || request()->is('myfeed'))
         <x-search-bar/>
     @endif
     <main>

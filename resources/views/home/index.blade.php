@@ -1,8 +1,8 @@
 <x-layout>
 <div class="content-layout">
-
+    
     <x-art-banner :art_images="$art_images"/>
-
+    
     <div class="masonry-wrapper">
         <div class="masonry-container">
             @forelse ($posts as $post)

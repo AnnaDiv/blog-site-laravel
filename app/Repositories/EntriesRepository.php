@@ -304,4 +304,13 @@ class EntriesRepository
         return $posts;
     }
 
+    public function myfeed(User $user) {
+
+        $followed_users = $user->following()->pluck('users.nickname');
+        $query = Post::with('categories')
+                ->whereIn('user_nickname', $followed_users);
+        $posts = $query->paginate(15);
+        return $posts;
+    }
+
 }

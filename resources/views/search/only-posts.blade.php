@@ -8,6 +8,7 @@
             </div>
         </div>
     @endif
+    <h2 class="item-title">@if($title) {{$title ?? ''}} @endif </h2>
     <div class="masonry-container posts-container">
             @forelse ($posts as $post)
                 <x-post-card :post="$post"/>

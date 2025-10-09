@@ -5,7 +5,7 @@
     <a href="{{route('home')}}">Home <i class="fa fa-house"></i></a>
     <a href="{{route('browse')}}">Browse <i class="fa fa-list-alt"></i></a>
     @auth
-        <a href="#myhome">My Homepage <i class="fa fa-home"></i></a>
+        <a href="{{ route('myfeed') }}">My Subs Page <i class="fa fa-feed"></i></a>
     @endauth
     <a href="{{ route('myart') }}">My art <i class="fa fa-paint-brush"></i></a>
     <a href="{{route('categories')}}">Categories <i class="fa fa-list-ol"></i></a>

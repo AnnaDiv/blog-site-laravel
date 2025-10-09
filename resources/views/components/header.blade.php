@@ -29,6 +29,7 @@
                     <img id="profile-toggle" src="{{asset('storage/user/alt/blank.jpeg')}}" alt="Avatar">
                 @endif
                 <nav id="side-nav-profile">
+                    <a href="{{ route('myfeed') }}"><i class="fa fa-deed"></i> My Subs Page</a>
                     <a href="{{route('post.createView')}}"><i class="fa fa-plus"></i> Create Post</a>
                     <a href="{{route('profile.public', $user->nickname)}}"><i class="fa fa-user-circle"></i> My profile</a>
                     <a><form method="POST" action="{{route('logout')}}">

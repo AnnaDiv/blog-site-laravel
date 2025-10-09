@@ -63,6 +63,9 @@ Route::middleware('guest')->group(function () { // only someone who isnt logged 
 });
 
 Route::middleware('auth')->group(function () { // only someone who is logged in can visit this
+
+    Route::get('/myfeed', [EntriesController::class, 'myfeed'])->name('myfeed');
+
     Route::get('/post/create', [EntriesController::class, 'createPostView'])->name('post.createView');
     Route::post('/post/create', [EntriesController::class, 'create'])->name('post.create');
     Route::post('/image/preview', [ImageController::class, 'preview'])->name('image.preview');

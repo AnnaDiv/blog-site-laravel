@@ -55,8 +55,9 @@ class EntriesController extends Controller
             $excludedUsers = [];
         }
         $posts = $this->entriesRepository->search($perPage, $quote, $excludedUsers);
+        $art_images = $this->entriesRepository->myart();
 
-        return view('home.index')->with('posts', $posts);
+        return view('home.index', compact('posts', 'art_images'));
     }
 
     public function createPostView(): View
@@ -176,7 +177,9 @@ class EntriesController extends Controller
 
         $posts = $this->entriesRepository->categoryPosts($category_id, $excludedUsers);
 
-        return view('home.index')->with('posts', $posts);
+        $art_images = $this->entriesRepository->myart();
+
+        return view('home.index', compact('posts', 'art_images'));
     }
 
     public function editPostView(Request $request, $post_id) : View {
@@ -307,21 +310,32 @@ class EntriesController extends Controller
         return view('post.view-post')->with('post', $post);
     }
 
-    public function myLikedPosts(Request $request, EntriesRepository $entriesRepository) : View | RedirectResponse{
+    public function myLikedPosts(Request $request) : View | RedirectResponse{
         $user = $request->user();
 
         if (!$user) {
             return back()->with('error', 'error loading liked posts');
         }
 
-        $posts = $entriesRepository->likedPosts($user);
+        $posts = $this->entriesRepository->likedPosts($user);
+        $title = 'My Liked Posts';
 
-        return  view('search.only-posts')->with('posts', $posts);       
+        return  view('search.only-posts', compact('posts', 'title'));       
     }
 
-    public function myart(EntriesRepository $entriesRepository) : View {
-        $posts = $entriesRepository->myart();
+    public function myart() : View {
+        $posts = $this->entriesRepository->myart();
 
         return view('search.only-posts')->with('posts', $posts);
+    }
+
+    public function myfeed(Request $request) : View {
+
+        $user = $request->user();
+
+        $posts = $this->entriesRepository->myfeed($user);
+        $title = 'Posts from my followed accounts';
+
+        return view('search.only-posts', compact('posts', 'title'));
     }
 }
