@@ -43,6 +43,19 @@ class EntriesRepository
         return $posts;
     }
 
+    public function allPublicPosts() {
+
+        $query = Post::with('categories')
+            ->with('likes')
+            ->with('comments')
+            ->where('deleted', false)
+            ->where('status', 'public')
+            ->where('type', 'post');
+
+        $posts = $query->paginate(15);
+        return $posts;
+    }
+
     public function excludedUsers(string|bool $nickname)
     {
         $user = User::where('nickname', $nickname)->first();

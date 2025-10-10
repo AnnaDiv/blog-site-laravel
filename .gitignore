@@ -16,6 +16,10 @@
 /public/build
 /public/hot
 /public/storage
+!public/storage/xml/
+!public/storage/xml/**
+!public/storage/post/
+public/storage/post/random
 /storage/*.key
 /storage/pail
 /vendor

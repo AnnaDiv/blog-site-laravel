@@ -15,6 +15,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SiteMapController;
 
 Route::get('/', [EntriesController::class, 'home'])->name('home');
 Route::get('/browse', [EntriesController::class, 'browse'])->name('browse');
@@ -40,6 +41,8 @@ Route::get('/password/help', [AccountController::class, 'passwordHelp'])->name('
 Route::post('/password/reset', [AccountController::class, 'passwordResetProduce'])->name('password.token');
 Route::get('/password/reset/{token}', [AccountController::class, 'passwordReset'])->name('password.reset');
 Route::post('/password/reset/submit', [AccountController::class, 'passwordResetSubmit'])->name('password.reset.submit');
+
+Route::get('/sitemap.xml/allPosts', [SiteMapController::class, 'xmlAllPosts'])->name('xml.all.posts');
 
 Route::get('/404', [AdminController::class, 'page404'])->name('page404');
 
