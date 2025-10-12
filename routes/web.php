@@ -42,7 +42,9 @@ Route::post('/password/reset', [AccountController::class, 'passwordResetProduce'
 Route::get('/password/reset/{token}', [AccountController::class, 'passwordReset'])->name('password.reset');
 Route::post('/password/reset/submit', [AccountController::class, 'passwordResetSubmit'])->name('password.reset.submit');
 
+Route::get('/sitemap.xml/show', [SiteMapController::class, 'index'])->name('xml.index');
 Route::get('/sitemap.xml/allPosts', [SiteMapController::class, 'xmlAllPosts'])->name('xml.all.posts');
+Route::get('/sitemap.xml/userPosts/{user_nickname}', [SiteMapController::class, 'xmlUser'])->name('xml.user.posts');
 
 Route::get('/404', [AdminController::class, 'page404'])->name('page404');
 

@@ -18,4 +18,5 @@
         <a href="{{ route('following') }}">Following <i class="fa fa-user-plus"></i></a>
         <a href="{{ route('followers') }}">Followers <i class="fa fa-users"></i></a>
     @endauth
+    <a href="{{route('xml.index')}}">XMLs<i class="fa fa-feed"></i></a>
 </nav>

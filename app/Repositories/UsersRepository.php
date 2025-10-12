@@ -145,4 +145,16 @@ class UsersRepository
 
         return $image_uploaded;
     }
+    
+    public function userXml(string $user_nickname) {
+
+        $user = User::select([
+            'nickname',
+            'motto',
+            'image_folder'
+        ])
+        ->withCount(['likes', 'comments', 'posts'])
+        ->where('nickname', $user_nickname)->firstorfail();
+        return $user;
+    }
 }
