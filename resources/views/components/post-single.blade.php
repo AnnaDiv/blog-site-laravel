@@ -10,6 +10,7 @@
             <br>
             <div class="post-actions-single">
                 <div>
+                    @auth
                     @if(!auth()->user()->admin)
                         @can('update', $post)
                             <div class="action-buttons-single">
@@ -46,6 +47,7 @@
                             </form>
                     @endadmin
                     </div>
+                    @endauth
                 </div>
                 <div class="like-wrapper">
                     <span id="like-count">0</span>
