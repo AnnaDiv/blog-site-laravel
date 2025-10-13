@@ -92,7 +92,14 @@ class EntriesController extends Controller
                 return redirect()->route('page404'); //not gonna show him this
             }
         }
-        
+        else {
+            if (($post->status == 'public') && ($post->deleted == 0)) {
+                return view('post.view-post')->with('post', $post);
+            }
+            else {
+                return redirect()->route('page404'); //not gonna show him this
+            }
+        }
     }
 
     public function create(Request $request, ImageCreator $creator): RedirectResponse
