@@ -340,4 +340,13 @@ class EntriesRepository
         return $posts;
     }
 
+    public function postForApi($post_id, User $user) {
+
+        $post = Post::where('id', $post_id)
+                ->where('user_nickname', $user->nickname)
+                ->where('deleted', 0)
+                ->firstorfail();
+        return $post;
+    }
+
 }

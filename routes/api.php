@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 Route::post('/token/login', [TokenController::class, 'login'])->name('api.login');
 
-Route::middleware('auth.jwt')->group(function () {
+Route::middleware('auth.jwt')->group(function () { //api routes csrf token free
 
     Route::get('/token/user', function (Request $request) {
         return response()->json([
@@ -16,5 +16,7 @@ Route::middleware('auth.jwt')->group(function () {
     Route::get('token/posts/all', [TokenController::class, 'allPosts'])->name('api.posts.all');
     Route::get('token/posts/public', [TokenController::class, 'publicPosts'])->name('api.posts.public');
     Route::get('token/posts/private', [TokenController::class, 'privatePosts'])->name('api.posts.private');
+
+    Route::get('token/post/{post_id}', [TokenController::class, 'postView'])->name('api.post.view');
 
 });

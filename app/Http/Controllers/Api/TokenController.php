@@ -60,4 +60,12 @@ class TokenController extends Controller
 
         return response()->json($posts);
     }
+
+    public function postView($post_id, Request $request) : JsonResponse{
+
+        $post = app(\App\Repositories\EntriesRepository::class)
+                ->postForApi($post_id, $request->user());
+
+        return response()->json($post);
+    }
 }
