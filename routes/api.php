@@ -19,4 +19,5 @@ Route::middleware('auth.jwt')->group(function () { //api routes csrf token free
 
     Route::get('token/post/{post_id}', [TokenController::class, 'postView'])->name('api.post.view');
 
+    Route::post('token/post/create', [TokenController::class, 'createPost'])->name('api.post.create');
 });
