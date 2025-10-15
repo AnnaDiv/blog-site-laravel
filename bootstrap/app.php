@@ -16,6 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'auth.jwt' => \App\Http\Middleware\JWTAuth::class
         ]);
+
+        // ----  enable session for api routes  ----
+        $middleware->appendToGroup('api', [
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

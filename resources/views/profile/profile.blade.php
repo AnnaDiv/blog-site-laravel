@@ -41,6 +41,9 @@
                 </button>
             </div>
         @endif
+        <button onclick="startThenOpen({{ $profile_owner->id }}, '{{ $profile_owner->nickname }}')">
+            Send message
+        </button>
     @endauth
 </div>
 

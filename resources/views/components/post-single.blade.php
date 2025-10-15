@@ -92,13 +92,19 @@ const postId = {{ (int) $post->id }};
 const postOwner = @json($post->user_nickname);
 const userId = @json(auth()->user()->id ?? null);
 const isAdmin = @json(auth()->user()->admin ?? null);
-const list = document.getElementById('comments-list');
-const form = document.getElementById('comment-form');
-const input = document.getElementById('comment-input');
-//const isAdmin = '';
-const likeImg = document.querySelector('#like-toggle img');
-const likeToggleButton = document.getElementById('like-toggle');
-const likeCountDisplay = document.getElementById('like-count');
+
+if (document.getElementById('comments-list')) {
+    const list  = document.getElementById('comments-list');
+    const form  = document.getElementById('comment-form');
+    const input = document.getElementById('comment-input');
+}
+
+if (document.getElementById('like-toggle')) {
+    const likeImg = document.querySelector('#like-toggle img');
+    const likeToggleButton = document.getElementById('like-toggle');
+    const likeCountDisplay = document.getElementById('like-count');
+}
+
 let userLiked = 0; 
 </script>
 <script src="{{ asset('js/likes.js')}}"></script>

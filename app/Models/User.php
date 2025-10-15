@@ -16,6 +16,8 @@ use App\Mail\ResetPasswordSubmission;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
 use App\Models\Like;
+use App\Models\Message;
+use App\Models\Conversation;
 
 class User extends Authenticatable
 {
@@ -150,5 +152,13 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         Mail::to($this->email)->send(new ResetPasswordSubmission($token, $this));
+    }
+
+    public function messages() : HasMany {
+        return $this->hasMany(Message::class, 'sender_id');        
+    }
+
+    public function conversations() : BelongsToMany {
+        return $this->belongsToMany(Conversation::class);        
     }
 }
