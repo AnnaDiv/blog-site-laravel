@@ -15,6 +15,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SiteMapController;
 
 Route::get('/', [EntriesController::class, 'home'])->name('home');
@@ -97,6 +98,8 @@ Route::middleware('auth')->group(function () { // only someone who is logged in 
 
     Route::get('/profile/edit/{profile}', [UsersController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/edit/{user}', [UsersController::class, 'update'])->name('profile.update');
+
+    Route::get('/conversations', [MessageController::class, 'conversations'])->name('conversations');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

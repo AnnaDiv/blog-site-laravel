@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#dm-bar-name').textContent = `Chat with ${nick}`;
 
         // always fetch/render, but control panel visibility
-        window.openDM(conv, nick);          // this now does steps 1-3
+        window.openDM(conv, nick);
         if (!open) {                        // was minimised → shut panel
             $('#dm-overlay').style.display = 'none';
             clearInterval(pollTimer);       // stop poll while minimised
@@ -178,10 +178,63 @@ window.closeChat = function(e){
 function bindForm(){
     const form = document.querySelector('#dm-form');
     if (!form) return;
-    form.replaceWith(form.cloneNode(true)); // remove old listeners
+    form.replaceWith(form.cloneNode(true));
     form.addEventListener('submit', e => {
         e.preventDefault();
         const txt = document.querySelector('#dm-input').value.trim();
         if (txt) sendMessage(txt);
     });
+}
+
+/* ----------  right-panel entry (no Alpine) ---------- */
+window.openInRightPanel = async function (convId, nickname){
+    const empty = document.getElementById('right-empty');
+    const chat  = document.getElementById('right-chat');
+    const msgBox= document.getElementById('message-box');
+    const header= document.getElementById('right-header-id');
+
+    /* show chat, hide placeholder */
+    empty.classList.add('hidden');
+    chat.classList.remove('hidden');
+
+    header.textContent = nickname;
+    currentConv        = convId;
+
+    /* first load */
+    const {data} = await api(`${API}/messages/${convId}`);
+    renderMessages(data, msgBox);
+
+    /* poll */
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(() => loadMessages(msgBox), 1500);
+
+    /* send handler */
+    const form  = document.getElementById('right-panel-form');
+    const input = document.getElementById('right-panel-input');
+    form.replaceWith(form.cloneNode(true));
+    document.getElementById('right-panel-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const txt = input.value.trim();
+        if (!txt) return;
+        await api(`${API}/messages/${currentConv}`, {
+            method: 'POST',
+            body: JSON.stringify({body: txt})
+        });
+        input.value = '';
+        await loadMessages(msgBox);
+    });
+};
+
+async function sendMessageChat(text) {
+    if (!text.trim() || !currentConv) return;
+
+    await api(`${API}/messages/${currentConv}`, {
+        method: 'POST',
+        body: JSON.stringify({ body: text.trim() })
+    });
+
+    document.getElementById('right-panel-input').value = '';
+
+    const {data} = await api(`${API}/messages/${currentConv}`);
+    renderMessages(data, document.getElementById('message-box'));
 }

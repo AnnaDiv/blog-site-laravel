@@ -14,6 +14,7 @@
     <a href="{{route('post.createView')}}">Create Post <i class="fa fa-plus"></i></a>
     @auth
         <a href="{{route('profile.public', auth()->user()->nickname)}}">My profile <i class="fa fa-user-circle"></i></a>
+        <a href="{{ route('conversations') }}">My messages<i class="fa fa-message"></i></a>
         <a href="{{ route('mylikes') }}">My likes <i class="fa fa-heart"></i></a>
         <a href="{{ route('following') }}">Following <i class="fa fa-user-plus"></i></a>
         <a href="{{ route('followers') }}">Followers <i class="fa fa-users"></i></a>

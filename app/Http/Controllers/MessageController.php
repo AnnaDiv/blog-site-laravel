@@ -8,10 +8,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class MessageController extends Controller
 {
@@ -111,6 +113,26 @@ class MessageController extends Controller
         $message->update(['read' => now()]);
 
         return response()->json(['status' => 'read']);
+    }
+
+    public function conversations(Request $request) : View | RedirectResponse {
+        $user = $request->user();
+
+        if(!$user) {
+            return redirect()->route('login');
+        }
+
+        $conversations = Conversation::with([
+                'users:id,nickname,image_folder',
+                'Messages:id,conversation_id,sender_id,body,created_at',
+                'Messages.sender:id,nickname'
+            ])
+            ->whereHas('users', function ($query) use ($user){
+                $query->where('users.id', $user->id);
+            })
+            ->paginate(5);
+
+        return view('messages.messages-page')->with('conversations', $conversations);
     }
 
 }
