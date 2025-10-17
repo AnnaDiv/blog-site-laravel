@@ -45,8 +45,8 @@
                                 @method('DELETE')
                                 <button>Delete(perma delete)</button>
                             </form>
+                        </div>
                     @endadmin
-                    </div>
                     @endauth
                 </div>
                 <div class="like-wrapper">
@@ -92,20 +92,21 @@ const postId = {{ (int) $post->id }};
 const postOwner = @json($post->user_nickname);
 const userId = @json(auth()->user()->id ?? null);
 const isAdmin = @json(auth()->user()->admin ?? null);
+const list = document.getElementById('comments-list');
+const form = document.getElementById('comment-form');
+const comment_input = document.getElementById('comment-input');
+//const isAdmin = '';
+const likeImg = document.querySelector('#like-toggle img');
+const likeToggleButton = document.getElementById('like-toggle');
+const likeCountDisplay = document.getElementById('like-count');
+let userLiked = 0;
 
-if (document.getElementById('comments-list')) {
-    const list  = document.getElementById('comments-list');
-    const form  = document.getElementById('comment-form');
-    const input = document.getElementById('comment-input');
-}
-
-if (document.getElementById('like-toggle')) {
-    const likeImg = document.querySelector('#like-toggle img');
-    const likeToggleButton = document.getElementById('like-toggle');
-    const likeCountDisplay = document.getElementById('like-count');
-}
-
-let userLiked = 0; 
+document.addEventListener('DOMContentLoaded', () => {
+    const id = sessionStorage.getItem('scrollToComment');
+    if (!id) return;
+    sessionStorage.removeItem('scrollToComment');
+    document.getElementById('comment' + id)?.scrollIntoView({ behavior: 'smooth' });
+});
 </script>
 <script src="{{ asset('js/likes.js')}}"></script>
 <script src="{{ asset('js/comments.js')}}"></script>

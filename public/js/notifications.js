@@ -1,24 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const dropdown = document.getElementById('dropdownList');
+    const dropdown  = document.getElementById('dropdownList');
     const toggleBtn = document.getElementById('dropdownToggle');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     if (!dropdown || !toggleBtn) return;
 
-    // Toggle dropdown visibility
     toggleBtn.addEventListener('click', () => {
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Fetch notifications
     fetch('/notifications')
         .then(res => res.json())
         .then(data => {
-            dropdown.innerHTML = ''; // Clear existing list
+            dropdown.innerHTML = '';
 
-            var content = data;
-
-            if (!Array.isArray(data) || data[0].length === 0 ) {
+            if (!Array.isArray(data[0]) || data[0].length === 0) {
                 dropdown.innerHTML = '<li>No notifications</li>';
                 toggleBtn.classList.remove('has-unread');
                 return;
@@ -28,12 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             data[0].forEach(item => {
                 const li = document.createElement('li');
-                const a = document.createElement('a');
+                const a  = document.createElement('a');
                 li.className = 'notification';
-                a.href = item.link;
+
+                const tmp   = new DOMParser().parseFromString(item.link, 'text/html');
+                const aOld  = tmp.querySelector('a');
+                const href  = aOld?.getAttribute('href') ?? '#';
+                const conv  = aOld?.dataset.conv  ?? '';
+                const nick  = aOld?.dataset.nick  ?? '';
+
+                a.href      = href;
                 a.textContent = item.content;
 
-                // Style as read/unread
                 if (item.used == 1) {
                     li.classList.add('notification-read');
                     a.classList.add('read-link');
@@ -43,40 +45,46 @@ document.addEventListener('DOMContentLoaded', function () {
                     hasUnread = true;
                 }
 
-                // On click, mark as read then redirect
-                a.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetUrl = item.link;
-
-                    fetch('/notifications', {
-                        method: 'POST',
-                        headers: { 
-                            "X-CSRF-TOKEN": csrfToken,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            notification_id: item.id
-                        })
-                    })
-                        .then(res => res.json())
-                        .then(() => {
-                            window.location.href = targetUrl;
-                        })
-                        .catch(err => {
-                            console.error('Failed to mark as read:', err);
-                            window.location.href = targetUrl;
-                        });
-                });
+                if (conv && nick) {
+                    a.addEventListener('click', () => {
+                        sessionStorage.setItem('openConv', conv);
+                        sessionStorage.setItem('openNick', nick);
+                        if (item.used == 0) {
+                            fetch('/notifications', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ notification_id: item.id })
+                            }).catch(() => {});
+                        }
+                    });
+                } else {
+                    a.addEventListener('click', () => {
+                        if (item.used == 0) {
+                            fetch('/notifications', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ notification_id: item.id })
+                            }).catch(() => {});
+                        }
+                    });
+                }
 
                 li.appendChild(a);
                 dropdown.appendChild(li);
             });
 
-            // Add class if there's any unread
-            if (hasUnread) {
-                toggleBtn.classList.add('has-unread');
-            } else {
-                toggleBtn.classList.remove('has-unread');
+            toggleBtn.classList.toggle('has-unread', hasUnread);
+
+            /* ---- NEW: fire event only after list is painted ---- */
+            if (window.location.pathname === '/conversations' &&
+                data[0].some(n => n.link.includes('data-conv'))) {
+                window.dispatchEvent(new CustomEvent('conversationsReady'));
             }
         })
         .catch(err => {

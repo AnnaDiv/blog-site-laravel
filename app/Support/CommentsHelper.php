@@ -59,7 +59,16 @@ class CommentsHelper
 
         $message = "{$sender->nickname} commented on your post: '{$comment->content}'";
     
-        $link = "/post/view/$place#comment$comment->id";
+        $link = vsprintf('<a href="%s" data-place="%s" data-comment="%s" onclick="sessionStorage.setItem(\'scrollToComment\', this.dataset.comment);">%s</a>',
+            [
+                route('post.view', ['post' => $place]), // /post/view/{post}
+                $place,                                  // data-place
+                $comment->id,                            // data-comment
+                $message                                // visible text you already built
+            ]
+        );
+
+        //$link = "/post/view/$place#comment$comment->id";
 
         Notification::create([
             'notification_owner_id' => $post_owner->id,
@@ -68,7 +77,7 @@ class CommentsHelper
             'place' => "comment",
             'link' => $link,
             'used' => 0
-        ]); 
+        ]);
 
         return true;
     }

@@ -1,3 +1,15 @@
+<script>
+// put this at the top of conversations page
+window.conversationsReady = new Promise(res => {
+    const oldFetch = window.fetch;
+    window.fetch = function(...args) {
+        return oldFetch.apply(this, args).then(r => {
+            if (args[0] === '/conversations') res(); // list is now painted
+            return r;
+        });
+    };
+});
+</script>
 <x-layout>
 <style>
 .flex.h-screen { min-height: 0; }
@@ -87,4 +99,16 @@
 <script>
     const message_text = document.getElementById('message-box').textContent;
     const inputChat  = $('#right-panel-input');
+</script>
+<script>
+(() => {
+    const id   = sessionStorage.getItem('openConv');
+    const nick = sessionStorage.getItem('openNick');
+    if (!id) return;
+    sessionStorage.removeItem('openConv');
+    sessionStorage.removeItem('openNick');
+
+    /* listen first */
+    window.addEventListener('conversationsReady', () => openInRightPanel(id, nick), { once: true });
+})();
 </script>

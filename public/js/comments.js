@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  if (form && input && list) {
+  if (form && comment_input && list) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
         body: new URLSearchParams({
-          comment: input.value,
+          comment: comment_input.value,
           post_id: postId,
           post_owner: postOwner
         })
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            input.value = '';
+            comment_input.value = '';
             fetchComments();
           } else {
             alert(data.error || 'Failed to post comment');

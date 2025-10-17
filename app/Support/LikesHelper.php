@@ -65,23 +65,41 @@ class LikesHelper
         ];
     }
 
-    function addNotification(User $post_owner, User $sender, int $post_id): bool {
+    function addNotification(User $post_owner, User $sender, int $post_id) {
 
         if ($post_owner === $sender) return true;
 
-        $link = "/post/view/$post_id";
+        $post_place = Post::where('id', $post_id);
+
         $message = "{$sender->nickname} liked your post";
 
-        Notification::create([
+        $link = vsprintf(
+            '<a href="%s">%s</a>',
+            [
+                route('post.view', ['post' => $post_id]), // ← id is enough
+                $message
+            ]
+        );
+        //$link = "/post/view/$post_id";
+
+        $new_notification = Notification::create([
             'notification_owner_id' => $post_owner->id,
             'sender_id' => $sender->id,
             'content' => $message,
             'place' => "like",
             'link' => $link,
             'used' => 0
-        ]); 
+        ]);
 
-        return true;
+        Notification::where('id', '!=', $new_notification->id)
+            ->where('notification_owner_id', $post_owner->id)
+            ->where('sender_id', $sender->id)
+            ->where('content', $message)
+            ->where('place', 'like')
+            ->where('link', $link)
+            ->where('used', 0)
+            ->delete();
+
     }
 
 }
