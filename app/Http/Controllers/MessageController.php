@@ -68,6 +68,12 @@ class MessageController extends Controller
 
         $request->validate(['body' => 'required|string|max:2000']);
 
+        // if they have blocked each other
+        $reciever = $conversation->users->firstWhere('id', '!=', $user->id);
+        if ($user->hasBlocked($reciever) || $reciever->hasBlocked($user)) {
+            return response()->json(['message' => 'Blocked'], 403);
+        }
+
         $message = $conversation->messages()->create([
             'sender_id' => $user->id,
             'body'      => $request->body,
