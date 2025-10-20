@@ -1,3 +1,4 @@
+<x-layout>
 <script>
 // put this at the top of conversations page
 window.conversationsReady = new Promise(res => {
@@ -10,7 +11,6 @@ window.conversationsReady = new Promise(res => {
     };
 });
 </script>
-<x-layout>
 <style>
 .flex.h-screen { min-height: 0; }
 
@@ -95,10 +95,9 @@ window.conversationsReady = new Promise(res => {
         </div>
     </main>
 </div>
-</x-layout>
 <script>
     const message_text = document.getElementById('message-box').textContent;
-    const inputChat  = $('#right-panel-input');
+    const input_dm = document.querySelector('#right-panel-input');
 </script>
 <script>
 (() => {
@@ -112,3 +111,4 @@ window.conversationsReady = new Promise(res => {
     window.addEventListener('conversationsReady', () => openInRightPanel(id, nick), { once: true });
 })();
 </script>
+</x-layout>

@@ -98,9 +98,11 @@ async function sendMessage(text){
 
 function renderMessages(list, box){
     box.innerHTML = '';
+    //console.log('mine =', mine);
     list.forEach(m=>{
         const div = document.createElement('div');
-        div.className = 'dm-message ' + (m.sender_id === mine ? 'own' : '');
+        div.className = 'dm-message ' + (m.sender_id == mine ? 'own' : '');
+        //console.log('sender_id =', m.sender_id);
         div.innerHTML = `<span class="body">${m.body}</span>`;
         box.appendChild(div);
     });
@@ -210,17 +212,17 @@ window.openInRightPanel = async function (convId, nickname){
 
     /* send handler */
     const form  = document.getElementById('right-panel-form');
-    const input = document.getElementById('right-panel-input');
+    const input_dm = document.getElementById('right-panel-input');
     form.replaceWith(form.cloneNode(true));
     document.getElementById('right-panel-form').addEventListener('submit', async e => {
         e.preventDefault();
-        const txt = input.value.trim();
+        const txt = input_dm.value.trim();
         if (!txt) return;
         await api(`${API}/messages/${currentConv}`, {
             method: 'POST',
             body: JSON.stringify({body: txt})
         });
-        input.value = '';
+        input_dm.value = '';
         await loadMessages(msgBox);
     });
 };

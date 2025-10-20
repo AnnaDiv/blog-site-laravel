@@ -34,7 +34,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
-<body>
+<body data-auth-id="{{ auth()->id() }}">
     <x-header />
     @if(request()->is('browse') || request()->is('search/posts') || 
         request()->is('search/users') || request()->is('category/*')
@@ -89,7 +89,7 @@
     const $ = s => document.querySelector(s);
     const msgBox = $('#dm-messages');
     const input  = $('#dm-input');
-    const mine   = {{ auth()->id() }};
+    const mine = Number(document.body.dataset.authId);
 </script>
 <script src="{{ asset('js/messaging.js') }}"></script>
 </body>
