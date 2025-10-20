@@ -27,3 +27,4 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /filedump
+.env laravel_setup_for_host

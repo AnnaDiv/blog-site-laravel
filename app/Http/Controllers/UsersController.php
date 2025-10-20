@@ -9,7 +9,7 @@ use App\Repositories\UsersRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use App\Models\User;
-use App\models\Profile;
+use App\Models\Profile;
 
 class UsersController extends Controller
 {
