@@ -157,6 +157,9 @@
     max-width: 100%;
     margin: 5px auto;
     position: relative;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
 }
 
 .simple-text-intro {
@@ -267,6 +270,28 @@
     .content-layout {
         flex-direction: column;
         align-items: center;
+    }
+
+    .content-layout-home {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #social-info{
+        position: relative;
+        margin-top: 2rem;
+        width: 90%;
+        margin-left: 2.5%;
+    }
+
+    #intro {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .simple-text-intro {
+        margin-left: 0;
+        margin-right: 0;
+        flex-direction: column;
     }
 }
 
